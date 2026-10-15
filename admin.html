@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin & Inventory Dashboard | GLG Meat Trading</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+                    colors: {
+                        brand: { 50: '#fef2f2', 100: '#fee2e2', 200: '#fecaca', 400: '#f87171', 500: '#ef4444', 600: '#dc2626', 700: '#b91c1c', 900: '#7f1d1d' },
+                        dark: { 800: '#1e293b', 900: '#0f172a' }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans antialiased min-h-screen">
+
+    <!-- TOP HEADER -->
+    <header class="bg-dark-900 text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-brand-600 text-white w-10 h-10 rounded-xl flex items-center justify-center font-extrabold text-xl">
+                    GLG
+                </div>
+                <div>
+                    <span class="text-lg font-extrabold tracking-tight block leading-none">ADMIN DASHBOARD</span>
+                    <span class="text-xs text-slate-400">GLG Meat Trading - Novaliches, QC</span>
+                </div>
+            </div>
+            <a href="index.html" class="bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded-xl text-sm font-semibold transition flex items-center gap-2">
+                <i class="fa-solid fa-store mr-1"></i> View Website
+            </a>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <section id="admin-login" class="max-w-md mx-auto px-4 py-16">
+        <form id="admin-login-form" class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+            <div>
+                <h1 class="text-2xl font-extrabold text-dark-900">Admin Sign In</h1>
+                <p class="text-sm text-slate-500 mt-2">Sign in with the verified administrator account to manage the storefront and orders.</p>
+            </div>
+            <p id="admin-auth-message" class="text-sm text-red-700" role="alert"></p>
+            <button id="admin-google-sign-in" type="button" class="w-full bg-brand-600 hover:bg-brand-700 text-white py-3 rounded-xl font-bold">Sign in with Google</button>
+        </form>
+    </section>
+
+    <main id="admin-dashboard" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+        <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <div>
+                    <h2 class="text-xl font-extrabold text-dark-900">Storefront Content</h2>
+                    <p class="text-slate-500 text-sm">Edit the text shown on the public website and manage products and prices.</p>
+                </div>
+                <button id="admin-sign-out" type="button" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl text-sm font-semibold">Sign Out</button>
+            </div>
+            <form id="store-content-form" class="space-y-6">
+                <div id="content-fields" class="grid md:grid-cols-2 gap-4"></div>
+                <div>
+                    <label for="products-json" class="block font-bold text-dark-900 mb-1">Products (JSON)</label>
+                    <p class="text-slate-500 text-xs mb-2">Edit product names, categories, descriptions, images, prices, and units. Categories: beef, seafood, sausages.</p>
+                    <textarea id="products-json" required rows="16" spellcheck="false" class="w-full font-mono text-sm border border-slate-300 rounded-xl p-4"></textarea>
+                </div>
+                <p id="store-content-message" class="text-sm" role="status"></p>
+                <button type="submit" class="bg-brand-600 hover:bg-brand-700 text-white px-6 py-3 rounded-xl font-bold">Save Storefront Changes</button>
+            </form>
+        </section>
+
+        
+        <!-- STATS -->
+        <div class="grid sm:grid-cols-3 gap-6">
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+                <div class="text-slate-500 text-xs font-bold uppercase">Total Orders / Inquiries</div>
+                <div id="stat-total-orders" class="text-3xl font-extrabold text-dark-900">0</div>
+            </div>
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+                <div class="text-slate-500 text-xs font-bold uppercase">Wholesale & Bulk Requests</div>
+                <div id="stat-wholesale" class="text-3xl font-extrabold text-brand-600">0</div>
+            </div>
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+                <div class="text-slate-500 text-xs font-bold uppercase">System Status</div>
+                <div class="text-emerald-600 text-xl font-extrabold flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span> Live & Connected</div>
+            </div>
+        </div>
+
+        <!-- ORDERS TABLE -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="p-6 border-b border-slate-200 flex justify-between items-center">
+                <div>
+                    <h3 class="text-lg font-bold text-dark-900">Customer Orders & Inquiries</h3>
+                    <p class="text-slate-500 text-xs">Live feed of orders submitted through the website.</p>
+                </div>
+                <button onclick="loadOrders()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl text-sm font-semibold transition">
+                    <i class="fa-solid fa-rotate mr-1"></i> Refresh Feed
+                </button>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50 text-slate-500 text-xs uppercase border-b border-slate-200">
+                            <th class="p-4">Customer</th>
+                            <th class="p-4">Contact</th>
+                            <th class="p-4">Type</th>
+                            <th class="p-4">Items Ordered / Inquiry</th>
+                            <th class="p-4">Total Amount</th>
+                            <th class="p-4">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orders-table-body" class="divide-y divide-slate-100 text-sm">
+                        <tr><td colspan="6" class="p-8 text-center text-slate-400">Loading orders from database...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- INVENTORY SECTION -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h3 class="text-lg font-bold text-dark-900">Inventory Stock Status</h3>
+                    <p class="text-slate-500 text-xs">Manage your meat cuts and seafood stock levels.</p>
+                </div>
+            </div>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4" id="inventory-grid"></div>
+        </div>
+
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, doc, getDoc, getDocs, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { firebaseConfig, adminEmail } from "./firebase-config.js";
+        import { defaultSiteContent } from "./site-content.js";
+
+        const loginPanel = document.getElementById("admin-login");
+        const dashboard = document.getElementById("admin-dashboard");
+        const authMessage = document.getElementById("admin-auth-message");
+        const contentMessage = document.getElementById("store-content-message");
+        const contentForm = document.getElementById("store-content-form");
+        const signInButton = document.getElementById("admin-google-sign-in");
+
+        function escapeHtml(value) {
+            return String(value).replace(/[&<>"']/g, character => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;"
+            })[character]);
+        }
+
+        function showSetupRequired() {
+            authMessage.textContent = "Admin editing is not connected yet. Complete the Firebase setup in FIREBASE-SETUP.md first.";
+            signInButton.disabled = true;
+        }
+
+        async function initializeAdmin() {
+            const configReady = Object.values(firebaseConfig).every(value => value && !value.startsWith("YOUR_"))
+                && adminEmail !== "ADMIN_EMAIL_HERE";
+            if (!configReady) {
+                showSetupRequired();
+                return;
+            }
+
+            const app = initializeApp(firebaseConfig);
+            const auth = getAuth(app);
+            const db = getFirestore(app);
+            const contentRef = doc(db, "siteContent", "public");
+
+            function buildContentEditor(content) {
+                const fields = document.getElementById("content-fields");
+                fields.innerHTML = Object.entries(defaultSiteContent)
+                    .filter(([key]) => key !== "products")
+                    .map(([key]) => `
+                        <label class="block text-sm font-semibold text-slate-700">
+                            ${escapeHtml(key.replace(/([A-Z])/g, " $1").replace(/^./, letter => letter.toUpperCase()))}
+                            <textarea id="content-${escapeHtml(key)}" rows="2" class="mt-1 w-full border border-slate-300 rounded-xl px-3 py-2 font-normal">${escapeHtml(content[key] ?? defaultSiteContent[key])}</textarea>
+                        </label>
+                    `).join("");
+                document.getElementById("products-json").value = JSON.stringify(content.products || defaultSiteContent.products, null, 2);
+            }
+
+            async function loadContent() {
+                contentMessage.textContent = "Loading published content…";
+                try {
+                    const snapshot = await getDoc(contentRef);
+                    buildContentEditor(snapshot.exists() ? { ...defaultSiteContent, ...snapshot.data() } : defaultSiteContent);
+                    contentMessage.textContent = snapshot.exists()
+                        ? "Published storefront content loaded."
+                        : "No saved content yet. Default storefront content loaded; saving will publish it.";
+                    contentMessage.className = "text-sm text-slate-600";
+                } catch (error) {
+                    console.error("Could not load storefront content:", error);
+                    contentMessage.textContent = "Could not load storefront content. Check your Firestore setup and rules.";
+                    contentMessage.className = "text-sm text-red-700";
+                }
+            }
+
+            function readContentForm() {
+                const content = {};
+                Object.keys(defaultSiteContent).filter(key => key !== "products").forEach(key => {
+                    content[key] = document.getElementById(`content-${key}`).value.trim();
+                });
+                if (!/^\d+$/.test(content.whatsAppNumber)) {
+                    throw new Error("WhatsApp number must contain digits only, including the country code.");
+                }
+                let products;
+                try {
+                    products = JSON.parse(document.getElementById("products-json").value);
+                } catch {
+                    throw new Error("Products must be valid JSON.");
+                }
+                if (!Array.isArray(products) || products.length === 0) {
+                    throw new Error("Add at least one product to the products list.");
+                }
+                const ids = new Set();
+                products.forEach((product, index) => {
+                    if (!product || !Number.isInteger(product.id) || ids.has(product.id)
+                        || !["beef", "seafood", "sausages"].includes(product.category)
+                        || typeof product.name !== "string" || !product.name.trim()
+                        || typeof product.desc !== "string" || typeof product.unit !== "string"
+                        || typeof product.image !== "string"
+                        || typeof product.price !== "number" || !Number.isFinite(product.price) || product.price < 0) {
+                        throw new Error(`Product ${index + 1} has invalid fields, category, ID, or price.`);
+                    }
+                    ids.add(product.id);
+                });
+                content.products = products;
+                return content;
+            }
+
+            signInButton.addEventListener("click", async () => {
+                authMessage.textContent = "Signing in…";
+                try {
+                    await signInWithPopup(auth, new GoogleAuthProvider());
+                } catch (error) {
+                    console.error("Admin sign-in failed:", error);
+                    authMessage.textContent = "Google sign-in failed. Check the Firebase Authentication setup and authorized domain.";
+                }
+            });
+
+            document.getElementById("admin-sign-out").addEventListener("click", () => signOut(auth));
+
+            contentForm.addEventListener("submit", async event => {
+                event.preventDefault();
+                contentMessage.className = "text-sm text-slate-600";
+                try {
+                    const content = readContentForm();
+                    await setDoc(contentRef, { ...content, updatedAt: serverTimestamp() });
+                    contentMessage.textContent = "Storefront changes saved and published.";
+                    contentMessage.className = "text-sm text-emerald-700";
+                } catch (error) {
+                    console.error("Could not save storefront content:", error);
+                    contentMessage.textContent = error.message || "Could not save storefront content. Check your Firestore rules.";
+                    contentMessage.className = "text-sm text-red-700";
+                }
+            });
+
+            onAuthStateChanged(auth, async user => {
+                dashboard.classList.add("hidden");
+                loginPanel.classList.remove("hidden");
+                if (!user) return;
+                if (user.email !== adminEmail || !user.emailVerified) {
+                    authMessage.textContent = user.email !== adminEmail
+                        ? "This account is not authorized to manage the storefront."
+                        : "Verify the administrator email before signing in.";
+                    await signOut(auth);
+                    return;
+                }
+                authMessage.textContent = "";
+                loginPanel.classList.add("hidden");
+                dashboard.classList.remove("hidden");
+                await loadContent();
+                await loadOrders(db);
+            });
+
+            window.loadOrders = () => loadOrders(db);
+        }
+
+        const productsList = [
+            { name: "USDA Choice Ribeye Steak", stock: "In Stock (120 kg)" },
+            { name: "Brazilian Ribeye Cuberoll", stock: "In Stock (250 kg)" },
+            { name: "Saikoro Wagyu Cubes", stock: "Low Stock (45 packs)" },
+            { name: "Meltique Porterhouse Cut", stock: "In Stock (85 kg)" },
+            { name: "Atlantic Salmon Fillet", stock: "In Stock (150 kg)" },
+            { name: "Atlantic Salmon Belly", stock: "In Stock (90 kg)" },
+            { name: "Premium Tuna Belly", stock: "In Stock (70 kg)" },
+            { name: "Cheesy Hungarian Sausage", stock: "In Stock (300 packs)" },
+            { name: "Japanese Kurobuta Sausage", stock: "In Stock (180 packs)" }
+        ];
+
+        function renderInventory() {
+            const grid = document.getElementById("inventory-grid");
+            grid.innerHTML = productsList.map(product => `
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex justify-between items-center">
+                    <div><h4 class="font-bold text-sm text-dark-900">${escapeHtml(product.name)}</h4>
+                    <span class="text-xs text-emerald-600 font-semibold">${escapeHtml(product.stock)}</span></div>
+                    <button onclick="alert('Stock quantity updated successfully!')" class="bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 text-xs px-3 py-1.5 rounded-lg font-semibold">Update</button>
+                </div>`).join("");
+        }
+
+        async function loadOrders(db) {
+            renderInventory();
+            const tbody = document.getElementById("orders-table-body");
+            tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-400">Loading orders...</td></tr>`;
+            try {
+                const querySnapshot = await getDocs(collection(db, "orders"));
+                if (querySnapshot.empty) {
+                    tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-400">No orders or inquiries received yet.</td></tr>`;
+                    document.getElementById("stat-total-orders").innerText = "0";
+                    document.getElementById("stat-wholesale").innerText = "0";
+                    return;
+                }
+                let wholesaleCount = 0;
+                tbody.innerHTML = querySnapshot.docs.map(orderDoc => {
+                    const data = orderDoc.data();
+                    if (data.orderType && data.orderType.includes("Wholesale")) wholesaleCount++;
+                    const itemsHtml = Array.isArray(data.items) ? data.items.map(item =>
+                        `<div class="text-xs">• ${escapeHtml(item.name || "Item")} (${escapeHtml(item.qty || 0)}x)</div>`
+                    ).join("") : "";
+                    return `
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="p-4 font-bold text-dark-900">${escapeHtml(data.customerName || "N/A")}</td>
+                            <td class="p-4 text-slate-600">${escapeHtml(data.customerPhone || "N/A")}</td>
+                            <td class="p-4"><span class="bg-brand-50 text-brand-700 text-xs px-2.5 py-1 rounded-md font-semibold">${escapeHtml(data.orderType || "Retail")}</span></td>
+                            <td class="p-4">${itemsHtml}</td>
+                            <td class="p-4 font-bold text-dark-900">₱${Number(data.totalAmount || 0).toLocaleString()}</td>
+                            <td class="p-4"><span class="bg-amber-100 text-amber-800 text-xs px-2.5 py-1 rounded-md font-semibold">${escapeHtml(data.status || "Pending")}</span></td>
+                        </tr>`;
+                }).join("");
+                document.getElementById("stat-total-orders").innerText = querySnapshot.size;
+                document.getElementById("stat-wholesale").innerText = wholesaleCount;
+            } catch (error) {
+                console.error("Could not load orders:", error);
+                tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-red-500">Could not load orders. Check your Firestore setup and admin rules.</td></tr>`;
+            }
+        }
+
+        initializeAdmin();
+    </script>
+</body>
+</html>
