@@ -44,17 +44,17 @@ export function renderProducts(filter = 'all', searchQuery = '') {
 
     filtered.forEach(p => {
         grid.innerHTML += `
-            <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition flex flex-col justify-between product-card">
+            <div class="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden shadow-sm hover:shadow-md transition flex flex-col justify-between product-card">
                 <div class="p-6">
                     <div class="text-4xl mb-4 bg-brand-50 w-16 h-16 rounded-2xl flex items-center justify-center">${escapeHtml(p.image)}</div>
                     <span class="text-xs font-bold uppercase tracking-wider text-brand-600 bg-brand-50 px-2.5 py-1 rounded-md">${escapeHtml(p.category)}</span>
-                    <h3 class="text-xl font-bold text-dark-900 mt-2">${escapeHtml(p.name)}</h3>
-                    <p class="text-slate-600 text-xs mt-1 leading-relaxed">${escapeHtml(p.desc)}</p>
+                    <h3 class="text-xl font-bold text-white mt-2">${escapeHtml(p.name)}</h3>
+                    <p class="text-slate-300 text-xs mt-1 leading-relaxed">${escapeHtml(p.desc)}</p>
                 </div>
-                <div class="p-6 pt-0 flex items-center justify-between border-t border-slate-100 mt-4">
+                <div class="p-6 pt-0 flex items-center justify-between border-t border-slate-800 mt-4">
                     <div>
                         <span class="text-xs text-slate-400 block">${escapeHtml(storefrontCopy.productPriceLabel)}</span>
-                        <span class="text-lg font-extrabold text-dark-900">₱${Number(p.price).toLocaleString()} <span class="text-xs font-normal text-slate-500">${escapeHtml(p.unit)}</span></span>
+                        <span class="text-lg font-extrabold text-white">₱${Number(p.price).toLocaleString()} <span class="text-xs font-normal text-slate-400">${escapeHtml(p.unit)}</span></span>
                     </div>
                     <button onclick="addToCart(${p.id})" class="bg-brand-600 hover:bg-brand-700 text-white w-10 h-10 rounded-xl flex items-center justify-center font-bold transition shadow-sm">
                         <i class="fa-solid fa-plus"></i>
@@ -70,10 +70,10 @@ export function filterCategory(cat, eventTarget) {
     currentFilter = cat;
     document.querySelectorAll('.cat-btn').forEach(btn => {
         btn.classList.remove('bg-brand-600', 'text-white');
-        btn.classList.add('bg-white', 'text-slate-700', 'border', 'border-slate-200');
+        btn.classList.add('bg-slate-900', 'text-slate-300', 'border', 'border-slate-700');
     });
     if (eventTarget) {
-        eventTarget.classList.remove('bg-white', 'text-slate-700', 'border', 'border-slate-200');
+        eventTarget.classList.remove('bg-slate-900', 'text-slate-300', 'border', 'border-slate-700');
         eventTarget.classList.add('bg-brand-600', 'text-white');
     }
     const searchVal = document.getElementById('search-input')?.value || '';
@@ -116,16 +116,16 @@ export function updateCartUI() {
     cart.forEach((item, index) => {
         total += item.price * item.qty;
         container.innerHTML += `
-            <div class="flex items-center justify-between bg-slate-50 p-4 rounded-xl border border-slate-200">
+            <div class="flex items-center justify-between bg-slate-800 p-4 rounded-xl border border-slate-700">
                 <div>
-                    <h4 class="font-bold text-sm text-dark-900">${escapeHtml(item.name)}</h4>
-                    <span class="text-xs text-slate-500">₱${Number(item.price).toLocaleString()} ${escapeHtml(item.unit)}</span>
+                    <h4 class="font-bold text-sm text-white">${escapeHtml(item.name)}</h4>
+                    <span class="text-xs text-slate-400">₱${Number(item.price).toLocaleString()} ${escapeHtml(item.unit)}</span>
                 </div>
                 <div class="flex items-center gap-3">
-                    <div class="flex items-center border border-slate-300 rounded-lg bg-white">
-                        <button onclick="changeQty(${index}, -1)" class="px-2.5 py-1 text-slate-600 hover:bg-slate-100">-</button>
+                    <div class="flex items-center border border-slate-700 rounded-lg bg-slate-900">
+                        <button onclick="changeQty(${index}, -1)" class="px-2.5 py-1 text-slate-300 hover:bg-slate-700">-</button>
                         <span class="px-3 text-sm font-bold">${item.qty}</span>
-                        <button onclick="changeQty(${index}, 1)" class="px-2.5 py-1 text-slate-600 hover:bg-slate-100">+</button>
+                        <button onclick="changeQty(${index}, 1)" class="px-2.5 py-1 text-slate-300 hover:bg-slate-700">+</button>
                     </div>
                     <button onclick="removeItem(${index})" class="text-red-500 hover:text-red-700 text-sm"><i class="fa-solid fa-trash"></i></button>
                 </div>
@@ -174,7 +174,7 @@ export function sendViaWhatsApp() {
 
 // Global scope bindings for inline HTML handlers
 window.addToCart = addToCart;
-window.filterCategory = (cat) => filterCategory(cat, event.target);
+window.filterCategory = (cat, target) => filterCategory(cat, target);
 window.searchProducts = searchProducts;
 window.changeQty = changeQty;
 window.removeItem = removeItem;

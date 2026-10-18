@@ -26,7 +26,7 @@
         }
     </script>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased">
+<body class="bg-slate-950 text-slate-100 font-sans antialiased">
 
     <!-- TOP BAR -->
     <div class="bg-dark-900 text-slate-300 text-xs py-2 px-4 border-b border-slate-800">
@@ -43,19 +43,17 @@
     </div>
 
     <!-- NAVBAR -->
-    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm">
+    <header class="sticky top-0 z-40 bg-slate-950/95 backdrop-blur border-b border-slate-800 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <a href="#" class="flex items-center gap-3">
-                <div class="bg-brand-600 text-white w-12 h-12 rounded-xl flex items-center justify-center font-extrabold text-2xl shadow-md">
-                    GLG
-                </div>
+                <img src="assets/glg-meat-trading-logo.png" alt="GLG Meat Trading logo" class="brand-logo w-12 h-12 rounded-xl object-contain shadow-none">
                 <div>
-                    <span class="text-xl font-extrabold tracking-tight text-dark-900 block leading-none" data-copy="brandName">GLG MEAT TRADING</span>
+                    <span class="text-xl font-extrabold tracking-tight text-white block leading-none" data-copy="brandName">GLG MEAT TRADING</span>
                     <span class="text-xs font-semibold text-brand-600 tracking-wider uppercase mt-1 block" data-copy="brandTagline">Wholesale & Retail Supplier</span>
                 </div>
             </a>
             
-            <nav class="hidden md:flex items-center gap-8 font-medium text-sm text-slate-600">
+            <nav class="hidden md:flex items-center gap-8 font-medium text-sm text-slate-300">
                 <a href="#products" class="hover:text-brand-600 transition" data-copy="navProducts">Products & Catalog</a>
                 <a href="#about" class="hover:text-brand-600 transition" data-copy="navAbout">Why Choose Us</a>
                 <a href="#contact" class="hover:text-brand-600 transition" data-copy="navContact">Contact & Location</a>
@@ -73,14 +71,14 @@
 
     <!-- HERO SECTION -->
     <section class="relative text-white py-20 lg:py-28 overflow-hidden hero-meat-bg">
-        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fecaca_1px,transparent_1px)] [background-size:16px_16px]"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 grid lg:grid-cols-2 gap-12 items-center">
             <div class="space-y-6">
                 <div class="inline-flex items-center gap-2 bg-white/15 border border-white/30 text-white px-3 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider">
                     <i class="fa-solid fa-snowflake"></i> <span data-copy="heroBadge">Premium Cold-Chain Guaranteed</span>
                 </div>
                 <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
-                    <span data-copy="heroHeading">Quality Meats & Seafood for</span> <span class="text-white" data-copy="heroHighlight">Homes & Businesses</span>
+                    <span data-copy="heroHeading">Quality Meats & Seafood for</span> <span class="text-brand-600" data-copy="heroHighlight">Homes & Businesses</span>
                 </h1>
                 <p class="text-white/90 text-base sm:text-lg max-w-xl">
                     <span data-copy="heroDescription">Direct supplier and distributor in Novaliches, Quezon City. Offering USDA steaks, Brazilian beef cuts, fresh salmon, and specialty sausages at wholesale and retail prices.</span>
@@ -95,7 +93,7 @@
                 </div>
             </div>
             <div class="grid grid-cols-2 gap-4">
-                <div class="bg-white/10 backdrop-blur border border-white/25 p-6 rounded-2xl shadow-xl space-y-3">
+                <div class="feature-beef-card bg-white/10 backdrop-blur border border-white/25 p-6 rounded-2xl shadow-xl space-y-3">
                     <div class="w-10 h-10 rounded-xl bg-white/15 text-white flex items-center justify-center text-xl font-bold"><i class="fa-solid fa-utensils"></i></div>
                     <h3 class="font-bold text-lg text-white" data-copy="feature1Title">Steaks & Beef</h3>
                     <p class="text-white/80 text-xs" data-copy="feature1Description">USDA Ribeye, T-Bone, Meltique, Saikoro cubes & Brazilian cuts.</p>
@@ -123,21 +121,21 @@
     <section id="products" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center max-w-3xl mx-auto mb-12 space-y-3">
             <span class="text-brand-600 font-bold text-sm tracking-wider uppercase" data-copy="catalogEyebrow">Our Product Lineup</span>
-            <h2 class="text-3xl sm:text-4xl font-extrabold text-dark-900" data-copy="catalogHeading">Explore Premium Cuts & Seafood</h2>
-            <p class="text-slate-600 text-sm sm:text-base" data-copy="catalogDescription">Add items to your inquiry list or cart to request a quotation or finalize order details.</p>
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-white" data-copy="catalogHeading">Explore Premium Cuts & Seafood</h2>
+            <p class="text-slate-300 text-sm sm:text-base" data-copy="catalogDescription">Add items to your inquiry list or cart to request a quotation or finalize order details.</p>
         </div>
 
         <!-- Filters & Search -->
         <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
             <div class="flex flex-wrap gap-2 justify-center" id="category-filters">
-                <button onclick="filterCategory('all')" class="cat-btn active bg-brand-600 text-white px-5 py-2.5 rounded-xl font-semibold text-sm transition shadow-sm" data-copy="filterAll">All Products</button>
-                <button onclick="filterCategory('beef')" class="cat-btn bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 px-5 py-2.5 rounded-xl font-semibold text-sm transition" data-copy="filterBeef">Steaks & Beef</button>
-                <button onclick="filterCategory('seafood')" class="cat-btn bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 px-5 py-2.5 rounded-xl font-semibold text-sm transition" data-copy="filterSeafood">Seafood</button>
-                <button onclick="filterCategory('sausages')" class="cat-btn bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 px-5 py-2.5 rounded-xl font-semibold text-sm transition" data-copy="filterSausages">Sausages & Processed</button>
+                <button onclick="filterCategory('all', this)" class="cat-btn active bg-brand-600 text-white px-5 py-2.5 rounded-xl font-semibold text-sm transition shadow-sm" data-copy="filterAll">All Products</button>
+                <button onclick="filterCategory('beef', this)" class="cat-btn bg-slate-900 border border-slate-700 text-slate-300 hover:bg-slate-800 px-5 py-2.5 rounded-xl font-semibold text-sm transition" data-copy="filterBeef">Steaks & Beef</button>
+                <button onclick="filterCategory('seafood', this)" class="cat-btn bg-slate-900 border border-slate-700 text-slate-300 hover:bg-slate-800 px-5 py-2.5 rounded-xl font-semibold text-sm transition" data-copy="filterSeafood">Seafood</button>
+                <button onclick="filterCategory('sausages', this)" class="cat-btn bg-slate-900 border border-slate-700 text-slate-300 hover:bg-slate-800 px-5 py-2.5 rounded-xl font-semibold text-sm transition" data-copy="filterSausages">Sausages & Processed</button>
             </div>
             <div class="w-full md:w-72 relative">
                 <i class="fa-solid fa-search absolute left-4 top-3.5 text-slate-400"></i>
-                <input type="text" id="search-input" oninput="searchProducts()" data-placeholder="searchPlaceholder" placeholder="Search meat or seafood..." class="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-600 shadow-sm">
+                <input type="text" id="search-input" oninput="searchProducts()" data-placeholder="searchPlaceholder" placeholder="Search meat or seafood..." class="w-full pl-11 pr-4 py-3 bg-slate-900 border border-slate-700 text-white placeholder-slate-400 rounded-xl text-sm focus:outline-none focus:border-brand-600 shadow-sm">
             </div>
         </div>
 
@@ -146,27 +144,27 @@
     </section>
 
     <!-- WHY CHOOSE US -->
-    <section id="about" class="bg-white py-20 border-y border-slate-200">
+    <section id="about" class="bg-slate-900 py-20 border-y border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
                 <span class="text-brand-600 font-bold text-sm tracking-wider uppercase" data-copy="aboutEyebrow">The GLG Advantage</span>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-dark-900" data-copy="aboutHeading">Why Food Businesses & Families Trust Us</h2>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white" data-copy="aboutHeading">Why Food Businesses & Families Trust Us</h2>
             </div>
             <div class="grid md:grid-cols-3 gap-8">
-                <div class="p-8 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
+                <div class="p-8 rounded-2xl bg-slate-800 border border-slate-700 space-y-4">
                     <div class="w-12 h-12 bg-brand-100 text-brand-600 rounded-xl flex items-center justify-center text-2xl font-bold"><i class="fa-solid fa-snowflake"></i></div>
-                    <h3 class="text-xl font-bold text-dark-900" data-copy="about1Title">Strict Cold-Chain Integrity</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed" data-copy="about1Description">Our facilities maintain optimal freezing and chilling temperatures to ensure maximum freshness, texture, and taste upon delivery.</p>
+                    <h3 class="text-xl font-bold text-white" data-copy="about1Title">Strict Cold-Chain Integrity</h3>
+                    <p class="text-slate-300 text-sm leading-relaxed" data-copy="about1Description">Our facilities maintain optimal freezing and chilling temperatures to ensure maximum freshness, texture, and taste upon delivery.</p>
                 </div>
-                <div class="p-8 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
+                <div class="p-8 rounded-2xl bg-slate-800 border border-slate-700 space-y-4">
                     <div class="w-12 h-12 bg-brand-100 text-brand-600 rounded-xl flex items-center justify-center text-2xl font-bold"><i class="fa-solid fa-hand-holding-dollar"></i></div>
-                    <h3 class="text-xl font-bold text-dark-900" data-copy="about2Title">Wholesale & Bulk Pricing</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed" data-copy="about2Description">Direct importer and distributor pricing designed to give restaurants, commissaries, and resellers the best profit margins.</p>
+                    <h3 class="text-xl font-bold text-white" data-copy="about2Title">Wholesale & Bulk Pricing</h3>
+                    <p class="text-slate-300 text-sm leading-relaxed" data-copy="about2Description">Direct importer and distributor pricing designed to give restaurants, commissaries, and resellers the best profit margins.</p>
                 </div>
-                <div class="p-8 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
+                <div class="p-8 rounded-2xl bg-slate-800 border border-slate-700 space-y-4">
                     <div class="w-12 h-12 bg-brand-100 text-brand-600 rounded-xl flex items-center justify-center text-2xl font-bold"><i class="fa-solid fa-truck-fast"></i></div>
-                    <h3 class="text-xl font-bold text-dark-900" data-copy="about3Title">Reliable Metro Manila Delivery</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed" data-copy="about3Description">Flexible dispatch via Lalamove, Grab, or direct refrigerated delivery trucks for large commercial orders.</p>
+                    <h3 class="text-xl font-bold text-white" data-copy="about3Title">Reliable Metro Manila Delivery</h3>
+                    <p class="text-slate-300 text-sm leading-relaxed" data-copy="about3Description">Flexible dispatch via Lalamove, Grab, or direct refrigerated delivery trucks for large commercial orders.</p>
                 </div>
             </div>
         </div>
@@ -232,7 +230,7 @@
     <footer class="bg-dark-900 text-slate-400 border-t border-slate-800 py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="flex items-center gap-3">
-                <div class="bg-brand-600 text-white w-10 h-10 rounded-xl flex items-center justify-center font-extrabold text-xl">GLG</div>
+                <img src="assets/glg-meat-trading-logo.png" alt="GLG Meat Trading logo" class="brand-logo w-10 h-10 rounded-xl object-contain shadow-none">
                 <span class="text-white font-bold text-lg" data-copy="brandName">GLG MEAT TRADING</span>
             </div>
             <p class="text-xs text-slate-500" data-copy="footerCopyright">&copy; 2026 GLG Meat Trading. All rights reserved. Wholesale & Retail Meats & Seafood Supplier.</p>
@@ -243,21 +241,21 @@
     <div id="cart-drawer" class="fixed inset-0 z-50 overflow-hidden hidden">
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onclick="closeCart()"></div>
         <div class="absolute inset-y-0 right-0 max-w-full flex pl-10">
-            <div class="w-screen max-w-md bg-white shadow-2xl flex flex-col">
+            <div class="w-screen max-w-md bg-slate-900 text-slate-100 shadow-2xl flex flex-col">
                 <div class="p-6 bg-dark-900 text-white flex items-center justify-between">
                     <h3 class="text-lg font-bold flex items-center gap-2"><i class="fa-solid fa-cart-shopping text-brand-500"></i> <span data-copy="cartHeading">Inquiry & Order Cart</span></h3>
                     <button onclick="closeCart()" class="text-slate-400 hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
                 </div>
                 <div class="flex-1 overflow-y-auto p-6 space-y-4" id="cart-items-container"></div>
-                <div class="p-6 bg-slate-100 border-t border-slate-200 space-y-4">
-                    <div class="flex justify-between items-center font-bold text-lg text-dark-900">
+                <div class="p-6 bg-slate-800 border-t border-slate-700 space-y-4">
+                    <div class="flex justify-between items-center font-bold text-lg text-white">
                         <span>Estimated Total:</span>
                         <span id="cart-total" class="text-brand-600">₱0.00</span>
                     </div>
-                    <div class="space-y-3 pt-2 border-t border-slate-200">
-                        <input type="text" id="order-name" data-placeholder="orderNamePlaceholder" placeholder="Full Name / Business Name *" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-600">
-                        <input type="text" id="order-phone" data-placeholder="orderPhonePlaceholder" placeholder="Contact Number (Viber/Mobile) *" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-600">
-                        <select id="order-type" class="w-full bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-600">
+                    <div class="space-y-3 pt-2 border-t border-slate-700">
+                        <input type="text" id="order-name" data-placeholder="orderNamePlaceholder" placeholder="Full Name / Business Name *" class="w-full bg-slate-900 text-white placeholder-slate-400 border border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-600">
+                        <input type="text" id="order-phone" data-placeholder="orderPhonePlaceholder" placeholder="Contact Number (Viber/Mobile) *" class="w-full bg-slate-900 text-white placeholder-slate-400 border border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-600">
+                        <select id="order-type" class="w-full bg-slate-900 text-white border border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-600">
                             <option value="Retail" data-copy="orderRetailOption">Retail Purchase</option>
                             <option value="Wholesale" data-copy="orderWholesaleOption">Wholesale / Restaurant Supply</option>
                             <option value="Bulk Ton Order" data-copy="orderBulkOption">Bulk / Ton Order</option>
@@ -275,6 +273,11 @@
             </div>
         </div>
     </div>
+
+    <script type="module">
+        import { renderProducts } from "./app.js";
+        renderProducts();
+    </script>
 
     <!-- FIREBASE & APP INIT -->
     <script type="module">
