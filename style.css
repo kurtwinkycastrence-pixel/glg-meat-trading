@@ -43,7 +43,6 @@
     border: none;
     background: transparent;
     box-shadow: none;
-    filter: saturate(0.78) brightness(0.92);
 }
 
 /* Product Card Hover Effect */
