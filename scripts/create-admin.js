@@ -21,7 +21,7 @@ const pool = createPool();
 try {
     const passwordHash = await bcrypt.hash(ADMIN_PASSWORD, 12);
     await pool.execute(
-        "INSERT INTO admins (email, password_hash) VALUES (?, ?) ON CONFLICT(email) DO UPDATE SET password_hash = excluded.password_hash",
+        "INSERT INTO admins (email, password_hash) VALUES (?, ?) ON CONFLICT(email) DO UPDATE SET password_hash = EXCLUDED.password_hash",
         [ADMIN_EMAIL.trim().toLowerCase(), passwordHash]
     );
     console.log(`Admin account ${ADMIN_EMAIL.trim().toLowerCase()} is ready.`);

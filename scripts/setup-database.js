@@ -33,7 +33,7 @@ export async function setupDatabase(pool) {
         } else {
             for (const product of defaultSiteContent.products) {
                 await connection.execute(
-                    "INSERT OR IGNORE INTO products (id, name, category, price, unit, image, description) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                    "INSERT INTO products (id, name, category, price, unit, image, description) VALUES (?, ?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO NOTHING",
                     [product.id, product.name, product.category, product.price, product.unit, product.image, product.desc]
                 );
             }
@@ -59,7 +59,7 @@ export async function setupDatabase(pool) {
         for (const [key, value] of Object.entries(defaultSiteContent)) {
             if (key === "products") continue;
             await connection.execute(
-                "INSERT OR IGNORE INTO site_content (content_key, content_value) VALUES (?, ?)",
+                "INSERT INTO site_content (content_key, content_value) VALUES (?, ?) ON CONFLICT(content_key) DO NOTHING",
                 [key, String(value)]
             );
         }
@@ -77,7 +77,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     const pool = createPool();
     try {
         await setupDatabase(pool);
-        console.log("SQLite tables and default storefront data are ready.");
+        console.log("PostgreSQL tables and default storefront data are ready.");
     } finally {
         await pool.end();
     }

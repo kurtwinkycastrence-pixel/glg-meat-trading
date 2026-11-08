@@ -9,82 +9,83 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="bg-slate-100 text-slate-800 font-sans antialiased min-h-screen">
-    <header class="bg-slate-950 text-white shadow-md">
+<body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen">
+    <header class="sticky top-0 z-40 bg-slate-950/95 text-white border-b border-slate-800 shadow-sm backdrop-blur">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <a href="index.html" class="flex items-center gap-3">
                 <img src="assets/images/logo.jpeg.png" alt="GLG Meat Trading logo" class="brand-logo w-10 h-10 rounded-xl object-contain shadow-none">
                 <span class="text-lg font-extrabold tracking-tight">GLG MEAT TRADING</span>
             </a>
-            <a href="index.html" class="bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded-xl text-sm font-semibold transition">
+            <a href="index.html" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white px-4 py-2 rounded-xl text-sm font-semibold transition">
                 <i class="fa-solid fa-store mr-1"></i> Storefront
             </a>
         </div>
     </header>
 
     <main class="max-w-3xl mx-auto px-4 py-12">
-        <section id="customer-auth" class="max-w-md mx-auto bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+        <section id="customer-auth" class="max-w-md mx-auto bg-slate-900 p-8 rounded-2xl border border-slate-800 shadow-xl shadow-black/20 space-y-5">
             <div>
-                <h1 class="text-2xl font-extrabold text-slate-900">Customer Account</h1>
-                <p id="auth-description" class="text-sm text-slate-500 mt-2">Sign in to view your account and order history.</p>
+                <span class="text-red-400 font-bold text-xs tracking-wider uppercase">GLG Meat Trading</span>
+                <h1 class="text-2xl font-extrabold text-white mt-1">Customer Account</h1>
+                <p id="auth-description" class="text-sm text-slate-400 mt-2">Sign in to view your account and order history.</p>
             </div>
             <p id="customer-auth-message" class="hidden text-sm" role="alert" aria-live="polite"></p>
 
             <form id="customer-login-form" class="space-y-4">
-                <label class="block text-sm font-semibold text-slate-700">
+                <label class="block text-sm font-semibold text-slate-200">
                     Email
-                    <input name="email" type="email" autocomplete="username" required class="mt-1 w-full border border-slate-300 rounded-xl px-3 py-3 font-normal">
+                    <input name="email" type="email" autocomplete="username" required class="mt-1 w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-3 text-white font-normal placeholder:text-slate-500 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-600/20">
                 </label>
-                <label class="block text-sm font-semibold text-slate-700">
+                <label class="block text-sm font-semibold text-slate-200">
                     Password
-                    <input name="password" type="password" autocomplete="current-password" required class="mt-1 w-full border border-slate-300 rounded-xl px-3 py-3 font-normal">
+                    <input name="password" type="password" autocomplete="current-password" required class="mt-1 w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-3 text-white font-normal placeholder:text-slate-500 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-600/20">
                 </label>
-                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-bold">Sign In</button>
-                <p class="text-sm text-center text-slate-600">New customer?
-                    <button id="show-register" type="button" class="font-bold text-red-700 hover:underline">Create an account</button>
+                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-bold shadow-lg shadow-red-900/20 transition">Sign In</button>
+                <p class="text-sm text-center text-slate-400">New customer?
+                    <button id="show-register" type="button" class="font-bold text-red-400 hover:text-red-300 hover:underline">Create an account</button>
                 </p>
             </form>
 
             <form id="customer-register-form" class="hidden space-y-4">
-                <label class="block text-sm font-semibold text-slate-700">
+                <label class="block text-sm font-semibold text-slate-200">
                     Full name
-                    <input name="fullName" type="text" autocomplete="name" maxlength="180" required class="mt-1 w-full border border-slate-300 rounded-xl px-3 py-3 font-normal">
+                    <input name="fullName" type="text" autocomplete="name" maxlength="180" required class="mt-1 w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-3 text-white font-normal placeholder:text-slate-500 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-600/20">
                 </label>
-                <label class="block text-sm font-semibold text-slate-700">
+                <label class="block text-sm font-semibold text-slate-200">
                     Phone number
-                    <input name="phone" type="tel" autocomplete="tel" maxlength="80" required class="mt-1 w-full border border-slate-300 rounded-xl px-3 py-3 font-normal">
+                    <input name="phone" type="tel" autocomplete="tel" maxlength="80" required class="mt-1 w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-3 text-white font-normal placeholder:text-slate-500 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-600/20">
                 </label>
-                <label class="block text-sm font-semibold text-slate-700">
+                <label class="block text-sm font-semibold text-slate-200">
                     Email
-                    <input name="email" type="email" autocomplete="email" maxlength="254" required class="mt-1 w-full border border-slate-300 rounded-xl px-3 py-3 font-normal">
+                    <input name="email" type="email" autocomplete="email" maxlength="254" required class="mt-1 w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-3 text-white font-normal placeholder:text-slate-500 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-600/20">
                 </label>
-                <label class="block text-sm font-semibold text-slate-700">
+                <label class="block text-sm font-semibold text-slate-200">
                     Password (at least 12 characters)
-                    <input name="password" type="password" autocomplete="new-password" minlength="12" maxlength="200" required class="mt-1 w-full border border-slate-300 rounded-xl px-3 py-3 font-normal">
+                    <input name="password" type="password" autocomplete="new-password" minlength="12" maxlength="200" required class="mt-1 w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-3 text-white font-normal placeholder:text-slate-500 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-600/20">
                 </label>
-                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-bold">Create Account</button>
-                <p class="text-sm text-center text-slate-600">Already have an account?
-                    <button id="show-login" type="button" class="font-bold text-red-700 hover:underline">Sign in</button>
+                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-bold shadow-lg shadow-red-900/20 transition">Create Account</button>
+                <p class="text-sm text-center text-slate-400">Already have an account?
+                    <button id="show-login" type="button" class="font-bold text-red-400 hover:text-red-300 hover:underline">Sign in</button>
                 </p>
             </form>
-            <p class="text-center text-xs text-slate-500">Admin? <a href="admin.html" class="font-semibold text-slate-700 hover:underline">Go to admin sign in</a></p>
+            <p class="text-center text-xs text-slate-500">Admin? <a href="admin.html" class="font-semibold text-slate-300 hover:text-white hover:underline">Go to admin sign in</a></p>
         </section>
 
         <section id="customer-account" class="hidden space-y-6">
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div class="bg-slate-900 rounded-2xl border border-slate-800 shadow-xl shadow-black/20 p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 class="text-2xl font-extrabold text-slate-900">My Account</h1>
-                    <p id="customer-profile" class="text-sm text-slate-600 mt-2"></p>
+                    <h1 class="text-2xl font-extrabold text-white">My Account</h1>
+                    <p id="customer-profile" class="text-sm text-slate-400 mt-2"></p>
                 </div>
-                <button id="customer-sign-out" type="button" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl text-sm font-semibold">Sign Out</button>
+                <button id="customer-sign-out" type="button" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white px-4 py-2 rounded-xl text-sm font-semibold transition">Sign Out</button>
             </div>
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-                <h2 class="text-xl font-extrabold text-slate-900">My Order History</h2>
-                <p class="text-sm text-slate-500 mt-1">Orders placed while signed in will appear here.</p>
-                <p id="customer-orders-message" class="text-sm text-slate-600 mt-5" role="status">Loading your orders…</p>
+            <div class="bg-slate-900 rounded-2xl border border-slate-800 shadow-xl shadow-black/20 p-6">
+                <h2 class="text-xl font-extrabold text-white">My Order History</h2>
+                <p class="text-sm text-slate-400 mt-1">Orders placed while signed in will appear here.</p>
+                <p id="customer-orders-message" class="text-sm text-slate-300 mt-5" role="status">Loading your orders…</p>
                 <div id="customer-orders" class="mt-4 space-y-4"></div>
             </div>
-            <a href="index.html#products" class="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-5 py-3 rounded-xl font-bold">
+            <a href="index.html#products" class="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-5 py-3 rounded-xl font-bold shadow-lg shadow-red-900/20 transition">
                 <i class="fa-solid fa-basket-shopping"></i> Browse Products
             </a>
         </section>
@@ -98,7 +99,7 @@
         const authMessage = document.getElementById("customer-auth-message");
         const ordersMessage = document.getElementById("customer-orders-message");
 
-        function setAuthMessage(message, className = "text-sm text-red-700") {
+        function setAuthMessage(message, className = "text-sm text-red-400") {
             authMessage.textContent = message;
             authMessage.className = message ? className : "hidden text-sm";
         }
@@ -157,7 +158,7 @@
 
         async function loadOrders() {
             ordersMessage.textContent = "Loading your orders…";
-            ordersMessage.className = "text-sm text-slate-600 mt-5";
+            ordersMessage.className = "text-sm text-slate-300 mt-5";
             try {
                 const orders = await request("/api/customer/orders");
                 const container = document.getElementById("customer-orders");
@@ -172,20 +173,20 @@
                         `<li>${escapeHtml(item.name)} × ${escapeHtml(item.qty)}</li>`
                     ).join("");
                     const createdAt = new Date(order.createdAt).toLocaleString();
-                    return `<article class="border border-slate-200 rounded-xl p-4">
+                    return `<article class="border border-slate-700 bg-slate-950/60 rounded-xl p-4">
                         <div class="flex flex-wrap justify-between gap-2">
                             <strong>Order #${escapeHtml(order.id)}</strong>
-                            <span class="text-sm text-slate-500">${escapeHtml(createdAt)}</span>
+                            <span class="text-sm text-slate-400">${escapeHtml(createdAt)}</span>
                         </div>
-                        <p class="text-sm text-slate-600 mt-1">${escapeHtml(order.orderType)} · ${escapeHtml(order.status)}</p>
-                        <ul class="text-sm text-slate-700 mt-3 list-disc list-inside">${items}</ul>
+                        <p class="text-sm text-slate-300 mt-1">${escapeHtml(order.orderType)} · ${escapeHtml(order.status)}</p>
+                        <ul class="text-sm text-slate-200 mt-3 list-disc list-inside">${items}</ul>
                         <p class="font-bold mt-3">Total: ₱${Number(order.totalAmount).toLocaleString()}</p>
                     </article>`;
                 }).join("");
             } catch (error) {
                 console.error("Could not load customer orders:", error);
                 ordersMessage.textContent = error.message;
-                ordersMessage.className = "text-sm text-red-700 mt-5";
+                ordersMessage.className = "text-sm text-red-400 mt-5";
             }
         }
 
@@ -205,7 +206,7 @@
 
         loginForm.addEventListener("submit", async event => {
             event.preventDefault();
-            setAuthMessage("Signing in…", "text-sm text-slate-600");
+            setAuthMessage("Signing in…", "text-sm text-slate-300");
             try {
                 const data = Object.fromEntries(new FormData(loginForm));
                 showAccount(await request("/api/customer/login", {
@@ -220,7 +221,7 @@
 
         registerForm.addEventListener("submit", async event => {
             event.preventDefault();
-            setAuthMessage("Creating your account…", "text-sm text-slate-600");
+            setAuthMessage("Creating your account…", "text-sm text-slate-300");
             try {
                 const data = Object.fromEntries(new FormData(registerForm));
                 showAccount(await request("/api/customer/register", {
@@ -239,7 +240,7 @@
                 showLogin();
             } catch (error) {
                 ordersMessage.textContent = error.message;
-                ordersMessage.className = "text-sm text-red-700 mt-5";
+                ordersMessage.className = "text-sm text-red-400 mt-5";
             }
         });
 

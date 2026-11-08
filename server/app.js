@@ -180,7 +180,7 @@ export function createApp({
         try {
             await connection.beginTransaction();
             const [insertResult] = await connection.execute(
-                "INSERT INTO orders (customer_id, customer_name, customer_phone, order_type, total_amount, status) VALUES (?, ?, ?, ?, ?, ?)",
+                "INSERT INTO orders (customer_id, customer_name, customer_phone, order_type, total_amount, status) VALUES (?, ?, ?, ?, ?, ?) RETURNING id",
                 [customerId, order.customerName, order.customerPhone, order.orderType, totalAmount, order.orderType === "Quick Inquiry" ? "Pending Inquiry" : "Pending"]
             );
             for (const item of items) {
@@ -212,7 +212,7 @@ export function createApp({
         }
         try {
             const [rows] = await pool.execute(
-                "SELECT customers.id, customers.full_name, customers.phone, customers.email FROM customer_sessions JOIN customers ON customers.id = customer_sessions.customer_id WHERE customer_sessions.token_hash = ? AND customer_sessions.expires_at > strftime('%Y-%m-%dT%H:%M:%fZ', 'now') LIMIT 1",
+                "SELECT customers.id, customers.full_name, customers.phone, customers.email FROM customer_sessions JOIN customers ON customers.id = customer_sessions.customer_id WHERE customer_sessions.token_hash = ? AND customer_sessions.expires_at > CURRENT_TIMESTAMP LIMIT 1",
                 [digestToken(token)]
             );
             if (!rows.length) {
@@ -327,7 +327,7 @@ export function createApp({
         try {
             const hashedPassword = await passwordHash(password, 12);
             const [result] = await pool.execute(
-                "INSERT INTO customers (full_name, phone, email, password_hash) VALUES (?, ?, ?, ?)",
+                "INSERT INTO customers (full_name, phone, email, password_hash) VALUES (?, ?, ?, ?) RETURNING id",
                 [fullName, phone, email, hashedPassword]
             );
             const customer = { id: result.insertId, full_name: fullName, phone, email };
@@ -340,7 +340,7 @@ export function createApp({
             setSessionCookie(response, token, secureCookie, sessionHours, customerSessionCookieName);
             response.status(201).json({ id: Number(customer.id), fullName, phone, email });
         } catch (error) {
-            if (error.code === "ER_DUP_ENTRY" || error.code === "SQLITE_CONSTRAINT_UNIQUE") {
+            if (error.code === "ER_DUP_ENTRY") {
                 response.status(409).json({ error: "An account with this email already exists." });
                 return;
             }
@@ -403,7 +403,7 @@ export function createApp({
         }
         try {
             const [rows] = await pool.execute(
-                "SELECT customers.id, customers.full_name, customers.phone, customers.email FROM customer_sessions JOIN customers ON customers.id = customer_sessions.customer_id WHERE customer_sessions.token_hash = ? AND customer_sessions.expires_at > strftime('%Y-%m-%dT%H:%M:%fZ', 'now') LIMIT 1",
+                "SELECT customers.id, customers.full_name, customers.phone, customers.email FROM customer_sessions JOIN customers ON customers.id = customer_sessions.customer_id WHERE customer_sessions.token_hash = ? AND customer_sessions.expires_at > CURRENT_TIMESTAMP LIMIT 1",
                 [digestToken(token)]
             );
             if (!rows.length) {
@@ -519,7 +519,7 @@ export function createApp({
         }
         try {
             const [rows] = await pool.execute(
-                "SELECT admins.id, admins.email FROM admin_sessions JOIN admins ON admins.id = admin_sessions.admin_id WHERE admin_sessions.token_hash = ? AND admin_sessions.expires_at > strftime('%Y-%m-%dT%H:%M:%fZ', 'now') LIMIT 1",
+                "SELECT admins.id, admins.email FROM admin_sessions JOIN admins ON admins.id = admin_sessions.admin_id WHERE admin_sessions.token_hash = ? AND admin_sessions.expires_at > CURRENT_TIMESTAMP LIMIT 1",
                 [digestToken(token)]
             );
             if (!rows.length) {
@@ -690,7 +690,7 @@ export function createApp({
     });
 
     app.use("/assets", express.static(path.join(root, "assets"), { dotfiles: "deny", fallthrough: false }));
-    app.use("/css", express.static(path.join(root, "css"), { dotfiles: "deny", fallthrough: false }));
+    app.use("/css", express.static(path.join(root, "database", "css"), { dotfiles: "deny", fallthrough: false }));
     app.use("/js", express.static(path.join(root, "js"), { dotfiles: "deny", fallthrough: false }));
     app.get(["/", "/index.html", "/admin.html", "/customer.html"], (request, response) => {
         const fileName = request.path === "/admin.html"

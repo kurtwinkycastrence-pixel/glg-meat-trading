@@ -353,6 +353,12 @@ body.min-h-screen {
         #f1f5f9;
 }
 
+body.bg-slate-950.min-h-screen {
+    background:
+        radial-gradient(ellipse at 50% -20rem, rgba(127, 29, 29, 0.18), transparent 60%),
+        #020617;
+}
+
 body.min-h-screen > header {
     background: #0b1120;
 }

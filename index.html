@@ -9,6 +9,52 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <style>
+        .hero-feature-grid {
+            align-items: stretch;
+            grid-auto-rows: minmax(16rem, 1fr);
+        }
+
+        .hero-feature-card {
+            display: flex;
+            min-width: 0;
+            flex-direction: column;
+            gap: 0.85rem;
+            padding: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 1rem;
+            background: rgba(15, 23, 42, 0.82);
+            color: #f8fafc;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(12px);
+        }
+
+        .hero-feature-image {
+            width: 100%;
+            aspect-ratio: 16 / 8;
+            overflow: hidden;
+            border-radius: 0.7rem;
+            background: #1e293b;
+        }
+
+        .hero-feature-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero-feature-copy {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.4rem;
+        }
+
+        .hero-feature-copy h3,
+        .hero-feature-copy p {
+            margin: 0;
+        }
+
         .catalog-category-section + .catalog-category-section {
             margin-top: 2.5rem;
         }
@@ -206,27 +252,47 @@
                     </a>
                 </div>
             </div>
-            <div class="grid grid-cols-2 gap-4">
-                <div class="feature-beef-card bg-white/10 backdrop-blur border border-white/25 p-6 rounded-2xl shadow-xl space-y-3">
-                    <div class="w-10 h-10 rounded-xl bg-white/15 text-white flex items-center justify-center text-xl font-bold"><i class="fa-solid fa-utensils"></i></div>
-                    <h3 class="font-bold text-lg text-white" data-copy="feature1Title">Steaks & Beef</h3>
-                    <p class="text-white/80 text-xs" data-copy="feature1Description">USDA Ribeye, T-Bone, Meltique, Saikoro cubes & Brazilian cuts.</p>
-                </div>
-                <div class="bg-white/10 backdrop-blur border border-white/25 p-6 rounded-2xl shadow-xl space-y-3 translate-y-6">
-                    <div class="w-10 h-10 rounded-xl bg-white/15 text-white flex items-center justify-center text-xl font-bold"><i class="fa-solid fa-fish"></i></div>
-                    <h3 class="font-bold text-lg text-white" data-copy="feature2Title">Fresh Seafood</h3>
-                    <p class="text-white/80 text-xs" data-copy="feature2Description">Atlantic salmon fillets, salmon belly, and premium tuna cuts.</p>
-                </div>
-                <div class="bg-white/10 backdrop-blur border border-white/25 p-6 rounded-2xl shadow-xl space-y-3">
-                    <div class="w-10 h-10 rounded-xl bg-white/15 text-white flex items-center justify-center text-xl font-bold"><i class="fa-solid fa-fire"></i></div>
-                    <h3 class="font-bold text-lg text-white" data-copy="feature3Title">Sausages & Processed</h3>
-                    <p class="text-white/80 text-xs" data-copy="feature3Description">Cheesy Hungarian sausage, Japanese sausage, and chicken variants.</p>
-                </div>
-                <div class="bg-white/10 backdrop-blur border border-white/25 p-6 rounded-2xl shadow-xl space-y-3 translate-y-6">
-                    <div class="w-10 h-10 rounded-xl bg-white/15 text-white flex items-center justify-center text-xl font-bold"><i class="fa-solid fa-store"></i></div>
-                    <h3 class="font-bold text-lg text-white" data-copy="feature4Title">Wholesale & Retail</h3>
-                    <p class="text-white/80 text-xs" data-copy="feature4Description">Serving home cooks, restaurants, and bulk ton orders.</p>
-                </div>
+            <div class="hero-feature-grid grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <article class="hero-feature-card">
+                    <div class="hero-feature-image">
+                        <img src="assets/images/localsteak.jpeg.png" alt="Premium steak cut" loading="eager">
+                    </div>
+                    <div class="hero-feature-copy">
+                        <div class="w-10 h-10 rounded-xl bg-white/15 text-white flex items-center justify-center text-xl font-bold"><i class="fa-solid fa-utensils" aria-hidden="true"></i></div>
+                        <h3 class="font-bold text-lg" data-copy="feature1Title">Steaks & Beef</h3>
+                        <p class="text-white/80 text-xs" data-copy="feature1Description">USDA Ribeye, T-Bone, Meltique, Saikoro cubes & Brazilian cuts.</p>
+                    </div>
+                </article>
+                <article class="hero-feature-card">
+                    <div class="hero-feature-image">
+                        <img src="assets/images/seafoods.jpeg.png" alt="Fresh salmon fillets" loading="eager">
+                    </div>
+                    <div class="hero-feature-copy">
+                        <div class="w-10 h-10 rounded-xl bg-white/15 text-white flex items-center justify-center text-xl font-bold"><i class="fa-solid fa-fish" aria-hidden="true"></i></div>
+                        <h3 class="font-bold text-lg" data-copy="feature2Title">Fresh Seafood</h3>
+                        <p class="text-white/80 text-xs" data-copy="feature2Description">Atlantic salmon fillets, salmon belly, and premium tuna cuts.</p>
+                    </div>
+                </article>
+                <article class="hero-feature-card">
+                    <div class="hero-feature-image">
+                        <img src="assets/images/sausage.jpeg.png" alt="Packaged sausages" loading="eager">
+                    </div>
+                    <div class="hero-feature-copy">
+                        <div class="w-10 h-10 rounded-xl bg-white/15 text-white flex items-center justify-center text-xl font-bold"><i class="fa-solid fa-fire" aria-hidden="true"></i></div>
+                        <h3 class="font-bold text-lg" data-copy="feature3Title">Sausages & Processed</h3>
+                        <p class="text-white/80 text-xs" data-copy="feature3Description">Cheesy Hungarian sausage, Japanese sausage, and chicken variants.</p>
+                    </div>
+                </article>
+                <article class="hero-feature-card">
+                    <div class="hero-feature-image">
+                        <img src="assets/images/background.jpeg.png" alt="Selection of meat cuts" loading="eager">
+                    </div>
+                    <div class="hero-feature-copy">
+                        <div class="w-10 h-10 rounded-xl bg-white/15 text-white flex items-center justify-center text-xl font-bold"><i class="fa-solid fa-store" aria-hidden="true"></i></div>
+                        <h3 class="font-bold text-lg" data-copy="feature4Title">Wholesale & Retail</h3>
+                        <p class="text-white/80 text-xs" data-copy="feature4Description">Serving home cooks, restaurants, and bulk ton orders.</p>
+                    </div>
+                </article>
             </div>
         </div>
     </section>

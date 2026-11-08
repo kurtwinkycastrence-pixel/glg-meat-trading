@@ -6,7 +6,7 @@ const pool = createPool();
 try {
     await pool.query("SELECT 1");
 } catch (error) {
-    console.error("Could not open the SQLite database.", error.message);
+    console.error("Could not connect to PostgreSQL.", error.message);
     process.exit(1);
 }
 

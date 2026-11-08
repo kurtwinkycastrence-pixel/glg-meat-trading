@@ -1,19 +1,24 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { mkdtemp, rm } from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
 import { createServer } from "node:http";
 import { createApp } from "./app.js";
 import { createPool } from "./database.js";
 import { setupDatabase } from "../scripts/setup-database.js";
 import { defaultSiteContent } from "../js/site-content.js";
 
-test("SQLite setup seeds the store and supports separate customer and admin logins", async t => {
-    const pool = createPool({ DATABASE_PATH: ":memory:" });
+test("embedded PostgreSQL setup seeds the store and supports customer and admin accounts", async t => {
+    const dataPath = await mkdtemp(path.join(os.tmpdir(), "glg-meat-trading-"));
+    const pool = createPool({ DATABASE_PATH: dataPath });
     let server;
     t.after(async () => {
         if (server?.listening) {
             await new Promise((resolve, reject) => server.close(error => error ? reject(error) : resolve()));
         }
         await pool.end();
+        await rm(dataPath, { recursive: true, force: true });
     });
 
     await setupDatabase(pool);
@@ -44,7 +49,7 @@ test("SQLite setup seeds the store and supports separate customer and admin logi
         method: "POST",
         headers: jsonHeaders,
         body: JSON.stringify({
-            fullName: "SQLite Customer",
+            fullName: "Test Customer",
             phone: "09123456789",
             email: "customer@example.com",
             password: "customer-password"
@@ -57,7 +62,7 @@ test("SQLite setup seeds the store and supports separate customer and admin logi
         method: "POST",
         headers: jsonHeaders,
         body: JSON.stringify({
-            fullName: "SQLite Customer",
+            fullName: "Test Customer",
             phone: "09123456789",
             email: "customer@example.com",
             password: "customer-password"
@@ -87,7 +92,7 @@ test("SQLite setup seeds the store and supports separate customer and admin logi
     const customerOrders = await orderHistory.json();
     assert.equal(orderHistory.status, 200);
     assert.equal(customerOrders.length, 1);
-    assert.equal(customerOrders[0].customerName, "SQLite Customer");
+    assert.equal(customerOrders[0].customerName, "Test Customer");
     assert.equal(customerOrders[0].items[0].qty, 2);
 
     const adminLogin = await fetch(`${baseUrl}/api/admin/login`, {
