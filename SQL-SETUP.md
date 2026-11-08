@@ -18,3 +18,14 @@ The storefront, customer accounts, and admin dashboard use a same-origin Node.js
 The local database is stored in `database/postgres-data` and excluded from Git. Keep `.env` private and protect database backups. Existing data from an earlier database is not imported automatically.
 
 `npm test` runs the automated test suite, including a local database integration test.
+
+## Deploy the live app
+
+GitHub Pages only hosts static files and cannot run the account API or database. The included `render.yaml` configures the complete Node.js app for Render, including a persistent disk for customer accounts and orders.
+
+1. In Render, create a **Blueprint** from this GitHub repository and approve the `glg-meat-trading` web service.
+2. The service uses Render's Starter plan because the database needs a persistent disk. Review Render's current pricing before approving; the disk is mounted at `/var/data`.
+3. Wait for the first deployment to pass its `/api/health` check. Render runs the database setup before starting the server.
+4. Open the Render service URL (for example, `https://glg-meat-trading.onrender.com`) and use `/customer.html` to create an account. Use this deployed app URL instead of the GitHub Pages URL; GitHub Pages remains static and its account API will not work.
+
+Do not add `.env` or passwords to this repository. Configure any deployment secrets through Render's environment settings.

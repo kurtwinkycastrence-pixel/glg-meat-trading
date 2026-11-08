@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: glg-meat-trading
+    runtime: node
+    plan: starter
+    region: singapore
+    buildCommand: npm ci
+    startCommand: npm run db:setup && npm start
+    healthCheckPath: /api/health
+    disk:
+      name: glg-meat-trading-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: NODE_VERSION
+        value: 22.5.0
+      - key: NODE_ENV
+        value: production
+      - key: HOST
+        value: 0.0.0.0
+      - key: DATABASE_PATH
+        value: /var/data/postgres-data
+      - key: SESSION_HOURS
+        value: "8"
