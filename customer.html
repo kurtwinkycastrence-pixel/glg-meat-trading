@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Account | GLG Meat Trading</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans antialiased min-h-screen">
+    <header class="bg-slate-950 text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3">
+                <img src="assets/images/logo.jpeg.png" alt="GLG Meat Trading logo" class="brand-logo w-10 h-10 rounded-xl object-contain shadow-none">
+                <span class="text-lg font-extrabold tracking-tight">GLG MEAT TRADING</span>
+            </a>
+            <a href="index.html" class="bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded-xl text-sm font-semibold transition">
+                <i class="fa-solid fa-store mr-1"></i> Storefront
+            </a>
+        </div>
+    </header>
+
+    <main class="max-w-3xl mx-auto px-4 py-12">
+        <section id="customer-auth" class="max-w-md mx-auto bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+            <div>
+                <h1 class="text-2xl font-extrabold text-slate-900">Customer Account</h1>
+                <p id="auth-description" class="text-sm text-slate-500 mt-2">Sign in to view your account and order history.</p>
+            </div>
+            <p id="customer-auth-message" class="hidden text-sm" role="alert" aria-live="polite"></p>
+
+            <form id="customer-login-form" class="space-y-4">
+                <label class="block text-sm font-semibold text-slate-700">
+                    Email
+                    <input name="email" type="email" autocomplete="username" required class="mt-1 w-full border border-slate-300 rounded-xl px-3 py-3 font-normal">
+                </label>
+                <label class="block text-sm font-semibold text-slate-700">
+                    Password
+                    <input name="password" type="password" autocomplete="current-password" required class="mt-1 w-full border border-slate-300 rounded-xl px-3 py-3 font-normal">
+                </label>
+                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-bold">Sign In</button>
+                <p class="text-sm text-center text-slate-600">New customer?
+                    <button id="show-register" type="button" class="font-bold text-red-700 hover:underline">Create an account</button>
+                </p>
+            </form>
+
+            <form id="customer-register-form" class="hidden space-y-4">
+                <label class="block text-sm font-semibold text-slate-700">
+                    Full name
+                    <input name="fullName" type="text" autocomplete="name" maxlength="180" required class="mt-1 w-full border border-slate-300 rounded-xl px-3 py-3 font-normal">
+                </label>
+                <label class="block text-sm font-semibold text-slate-700">
+                    Phone number
+                    <input name="phone" type="tel" autocomplete="tel" maxlength="80" required class="mt-1 w-full border border-slate-300 rounded-xl px-3 py-3 font-normal">
+                </label>
+                <label class="block text-sm font-semibold text-slate-700">
+                    Email
+                    <input name="email" type="email" autocomplete="email" maxlength="254" required class="mt-1 w-full border border-slate-300 rounded-xl px-3 py-3 font-normal">
+                </label>
+                <label class="block text-sm font-semibold text-slate-700">
+                    Password (at least 12 characters)
+                    <input name="password" type="password" autocomplete="new-password" minlength="12" maxlength="200" required class="mt-1 w-full border border-slate-300 rounded-xl px-3 py-3 font-normal">
+                </label>
+                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-bold">Create Account</button>
+                <p class="text-sm text-center text-slate-600">Already have an account?
+                    <button id="show-login" type="button" class="font-bold text-red-700 hover:underline">Sign in</button>
+                </p>
+            </form>
+            <p class="text-center text-xs text-slate-500">Admin? <a href="admin.html" class="font-semibold text-slate-700 hover:underline">Go to admin sign in</a></p>
+        </section>
+
+        <section id="customer-account" class="hidden space-y-6">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                    <h1 class="text-2xl font-extrabold text-slate-900">My Account</h1>
+                    <p id="customer-profile" class="text-sm text-slate-600 mt-2"></p>
+                </div>
+                <button id="customer-sign-out" type="button" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl text-sm font-semibold">Sign Out</button>
+            </div>
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+                <h2 class="text-xl font-extrabold text-slate-900">My Order History</h2>
+                <p class="text-sm text-slate-500 mt-1">Orders placed while signed in will appear here.</p>
+                <p id="customer-orders-message" class="text-sm text-slate-600 mt-5" role="status">Loading your orders…</p>
+                <div id="customer-orders" class="mt-4 space-y-4"></div>
+            </div>
+            <a href="index.html#products" class="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-5 py-3 rounded-xl font-bold">
+                <i class="fa-solid fa-basket-shopping"></i> Browse Products
+            </a>
+        </section>
+    </main>
+
+    <script type="module">
+        const authPanel = document.getElementById("customer-auth");
+        const accountPanel = document.getElementById("customer-account");
+        const loginForm = document.getElementById("customer-login-form");
+        const registerForm = document.getElementById("customer-register-form");
+        const authMessage = document.getElementById("customer-auth-message");
+        const ordersMessage = document.getElementById("customer-orders-message");
+
+        function setAuthMessage(message, className = "text-sm text-red-700") {
+            authMessage.textContent = message;
+            authMessage.className = message ? className : "hidden text-sm";
+        }
+
+        function escapeHtml(value) {
+            return String(value).replace(/[&<>"']/g, character => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;"
+            })[character]);
+        }
+
+        async function request(url, options = {}) {
+            if (window.location.protocol === "file:") {
+                throw new Error("Customer sign-in needs the app server. Start it with npm start, then open http://127.0.0.1:3000/customer.html.");
+            }
+            const response = await fetch(url, {
+                ...options,
+                credentials: "same-origin",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Requested-With": "XMLHttpRequest",
+                    ...options.headers
+                }
+            });
+            const text = await response.text();
+            let result;
+            try {
+                result = text ? JSON.parse(text) : {};
+            } catch {
+                throw new Error("Could not read the server response. Make sure the app server is running.");
+            }
+            if (!response.ok) throw new Error(result.error || "The request could not be completed.");
+            return result;
+        }
+
+        function showLogin() {
+            accountPanel.classList.add("hidden");
+            authPanel.classList.remove("hidden");
+            registerForm.classList.add("hidden");
+            loginForm.classList.remove("hidden");
+            document.getElementById("auth-description").textContent = "Sign in to view your account and order history.";
+            setAuthMessage("");
+        }
+
+        function showAccount(customer) {
+            setAuthMessage("");
+            authPanel.classList.add("hidden");
+            accountPanel.classList.remove("hidden");
+            document.getElementById("customer-profile").innerHTML =
+                `<strong>${escapeHtml(customer.fullName)}</strong><br>${escapeHtml(customer.email)} · ${escapeHtml(customer.phone)}`;
+            loadOrders();
+        }
+
+        async function loadOrders() {
+            ordersMessage.textContent = "Loading your orders…";
+            ordersMessage.className = "text-sm text-slate-600 mt-5";
+            try {
+                const orders = await request("/api/customer/orders");
+                const container = document.getElementById("customer-orders");
+                if (!orders.length) {
+                    ordersMessage.textContent = "No orders yet. Orders placed while signed in will appear here.";
+                    container.innerHTML = "";
+                    return;
+                }
+                ordersMessage.textContent = "";
+                container.innerHTML = orders.map(order => {
+                    const items = order.items.map(item =>
+                        `<li>${escapeHtml(item.name)} × ${escapeHtml(item.qty)}</li>`
+                    ).join("");
+                    const createdAt = new Date(order.createdAt).toLocaleString();
+                    return `<article class="border border-slate-200 rounded-xl p-4">
+                        <div class="flex flex-wrap justify-between gap-2">
+                            <strong>Order #${escapeHtml(order.id)}</strong>
+                            <span class="text-sm text-slate-500">${escapeHtml(createdAt)}</span>
+                        </div>
+                        <p class="text-sm text-slate-600 mt-1">${escapeHtml(order.orderType)} · ${escapeHtml(order.status)}</p>
+                        <ul class="text-sm text-slate-700 mt-3 list-disc list-inside">${items}</ul>
+                        <p class="font-bold mt-3">Total: ₱${Number(order.totalAmount).toLocaleString()}</p>
+                    </article>`;
+                }).join("");
+            } catch (error) {
+                console.error("Could not load customer orders:", error);
+                ordersMessage.textContent = error.message;
+                ordersMessage.className = "text-sm text-red-700 mt-5";
+            }
+        }
+
+        document.getElementById("show-register").addEventListener("click", () => {
+            setAuthMessage("");
+            loginForm.classList.add("hidden");
+            registerForm.classList.remove("hidden");
+            document.getElementById("auth-description").textContent = "Create an account to see your profile and future order history.";
+        });
+
+        document.getElementById("show-login").addEventListener("click", () => {
+            setAuthMessage("");
+            registerForm.classList.add("hidden");
+            loginForm.classList.remove("hidden");
+            document.getElementById("auth-description").textContent = "Sign in to view your account and order history.";
+        });
+
+        loginForm.addEventListener("submit", async event => {
+            event.preventDefault();
+            setAuthMessage("Signing in…", "text-sm text-slate-600");
+            try {
+                const data = Object.fromEntries(new FormData(loginForm));
+                showAccount(await request("/api/customer/login", {
+                    method: "POST",
+                    body: JSON.stringify(data)
+                }));
+                loginForm.reset();
+            } catch (error) {
+                setAuthMessage(error.message);
+            }
+        });
+
+        registerForm.addEventListener("submit", async event => {
+            event.preventDefault();
+            setAuthMessage("Creating your account…", "text-sm text-slate-600");
+            try {
+                const data = Object.fromEntries(new FormData(registerForm));
+                showAccount(await request("/api/customer/register", {
+                    method: "POST",
+                    body: JSON.stringify(data)
+                }));
+                registerForm.reset();
+            } catch (error) {
+                setAuthMessage(error.message);
+            }
+        });
+
+        document.getElementById("customer-sign-out").addEventListener("click", async () => {
+            try {
+                await request("/api/customer/logout", { method: "POST", body: "{}" });
+                showLogin();
+            } catch (error) {
+                ordersMessage.textContent = error.message;
+                ordersMessage.className = "text-sm text-red-700 mt-5";
+            }
+        });
+
+        try {
+            showAccount(await request("/api/customer/session"));
+        } catch (error) {
+            if (!error.message.startsWith("Please sign in")
+                && !error.message.startsWith("Your customer session has expired")
+                && window.location.protocol !== "file:") {
+                setAuthMessage(error.message);
+            }
+        }
+    </script>
+</body>
+</html>

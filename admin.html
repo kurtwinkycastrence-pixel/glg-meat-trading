@@ -4,14 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin & Inventory Dashboard | GLG Meat Trading</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     <script>
         tailwind.config = {
             theme: {
@@ -28,11 +24,10 @@
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans antialiased min-h-screen">
 
-    <!-- TOP HEADER -->
     <header class="bg-dark-900 text-white shadow-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <img src="glg-meat-trading-logo.png" alt="GLG Meat Trading logo" class="brand-logo w-10 h-10 rounded-xl object-contain shadow-none">
+                <img src="assets/images/logo.jpeg.png" alt="GLG Meat Trading logo" class="brand-logo w-10 h-10 rounded-xl object-contain shadow-none">
                 <div>
                     <span class="text-lg font-extrabold tracking-tight block leading-none">ADMIN DASHBOARD</span>
                     <span class="text-xs text-slate-400">GLG Meat Trading - Novaliches, QC</span>
@@ -44,15 +39,22 @@
         </div>
     </header>
 
-    <!-- MAIN CONTENT -->
     <section id="admin-login" class="max-w-md mx-auto px-4 py-16">
         <form id="admin-login-form" class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-5">
             <div>
                 <h1 class="text-2xl font-extrabold text-dark-900">Admin Sign In</h1>
-                <p class="text-sm text-slate-500 mt-2">Sign in with the verified administrator account to manage the storefront and orders.</p>
+                <p class="text-sm text-slate-500 mt-2">Sign in to manage the storefront and customer orders.</p>
             </div>
             <p id="admin-auth-message" class="text-sm text-red-700" role="alert"></p>
-            <button id="admin-google-sign-in" type="button" class="w-full bg-brand-600 hover:bg-brand-700 text-white py-3 rounded-xl font-bold">Sign in with Google</button>
+            <label class="block text-sm font-semibold text-slate-700">
+                Email
+                <input id="admin-email" name="email" type="email" autocomplete="username" required class="mt-1 w-full border border-slate-300 rounded-xl px-3 py-3 font-normal">
+            </label>
+            <label class="block text-sm font-semibold text-slate-700">
+                Password
+                <input id="admin-password" name="password" type="password" autocomplete="current-password" required class="mt-1 w-full border border-slate-300 rounded-xl px-3 py-3 font-normal">
+            </label>
+            <button id="admin-sign-in" type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white py-3 rounded-xl font-bold">Sign in</button>
         </form>
     </section>
 
@@ -78,7 +80,6 @@
         </section>
 
         
-        <!-- STATS -->
         <div class="grid sm:grid-cols-3 gap-6">
             <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-2">
                 <div class="text-slate-500 text-xs font-bold uppercase">Total Orders / Inquiries</div>
@@ -94,7 +95,6 @@
             </div>
         </div>
 
-        <!-- ORDERS TABLE -->
         <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
             <div class="p-6 border-b border-slate-200 flex justify-between items-center">
                 <div>
@@ -124,32 +124,29 @@
             </div>
         </div>
 
-        <!-- INVENTORY SECTION -->
         <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-6">
             <div class="flex justify-between items-center">
                 <div>
                     <h3 class="text-lg font-bold text-dark-900">Inventory Stock Status</h3>
-                    <p class="text-slate-500 text-xs">Manage your meat cuts and seafood stock levels.</p>
+                    <p class="text-slate-500 text-xs">Set stock quantities for products. Leave a quantity blank to mark it as untracked.</p>
                 </div>
             </div>
             <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4" id="inventory-grid"></div>
+            <p id="inventory-message" class="text-sm" role="status"></p>
         </div>
 
     </main>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, doc, getDoc, getDocs, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        import { firebaseConfig, adminEmail } from "./firebase-config.js";
-        import { defaultSiteContent } from "./site-content.js";
+        import { defaultSiteContent } from "./js/site-content.js";
 
         const loginPanel = document.getElementById("admin-login");
         const dashboard = document.getElementById("admin-dashboard");
         const authMessage = document.getElementById("admin-auth-message");
         const contentMessage = document.getElementById("store-content-message");
+        const loginForm = document.getElementById("admin-login-form");
         const contentForm = document.getElementById("store-content-form");
-        const signInButton = document.getElementById("admin-google-sign-in");
+        const loginButton = document.getElementById("admin-sign-in");
 
         function escapeHtml(value) {
             return String(value).replace(/[&<>"']/g, character => ({
@@ -161,194 +158,229 @@
             })[character]);
         }
 
-        function showSetupRequired() {
-            authMessage.textContent = "Admin editing is not connected yet. Complete the Firebase setup in FIREBASE-SETUP.md first.";
-            signInButton.disabled = true;
-        }
-
-        async function initializeAdmin() {
-            const configReady = Object.values(firebaseConfig).every(value => value && !value.startsWith("YOUR_"))
-                && adminEmail !== "ADMIN_EMAIL_HERE";
-            if (!configReady) {
-                showSetupRequired();
-                return;
+        async function request(url, options = {}) {
+            if (window.location.protocol === "file:") {
+                throw new Error("Hindi gumagana ang login kapag direktang binuksan ang file. Patakbuhin ang app gamit ang `npm.cmd start`, pagkatapos buksan ang http://127.0.0.1:3000/admin.html.");
             }
-
-            const app = initializeApp(firebaseConfig);
-            const auth = getAuth(app);
-            const db = getFirestore(app);
-            const contentRef = doc(db, "siteContent", "public");
-
-            function buildContentEditor(content) {
-                const fields = document.getElementById("content-fields");
-                fields.innerHTML = Object.entries(defaultSiteContent)
-                    .filter(([key]) => key !== "products")
-                    .map(([key]) => `
-                        <label class="block text-sm font-semibold text-slate-700">
-                            ${escapeHtml(key.replace(/([A-Z])/g, " $1").replace(/^./, letter => letter.toUpperCase()))}
-                            <textarea id="content-${escapeHtml(key)}" rows="2" class="mt-1 w-full border border-slate-300 rounded-xl px-3 py-2 font-normal">${escapeHtml(content[key] ?? defaultSiteContent[key])}</textarea>
-                        </label>
-                    `).join("");
-                document.getElementById("products-json").value = JSON.stringify(content.products || defaultSiteContent.products, null, 2);
-            }
-
-            async function loadContent() {
-                contentMessage.textContent = "Loading published content…";
-                try {
-                    const snapshot = await getDoc(contentRef);
-                    buildContentEditor(snapshot.exists() ? { ...defaultSiteContent, ...snapshot.data() } : defaultSiteContent);
-                    contentMessage.textContent = snapshot.exists()
-                        ? "Published storefront content loaded."
-                        : "No saved content yet. Default storefront content loaded; saving will publish it.";
-                    contentMessage.className = "text-sm text-slate-600";
-                } catch (error) {
-                    console.error("Could not load storefront content:", error);
-                    contentMessage.textContent = "Could not load storefront content. Check your Firestore setup and rules.";
-                    contentMessage.className = "text-sm text-red-700";
-                }
-            }
-
-            function readContentForm() {
-                const content = {};
-                Object.keys(defaultSiteContent).filter(key => key !== "products").forEach(key => {
-                    content[key] = document.getElementById(`content-${key}`).value.trim();
-                });
-                if (!/^\d+$/.test(content.whatsAppNumber)) {
-                    throw new Error("WhatsApp number must contain digits only, including the country code.");
-                }
-                let products;
-                try {
-                    products = JSON.parse(document.getElementById("products-json").value);
-                } catch {
-                    throw new Error("Products must be valid JSON.");
-                }
-                if (!Array.isArray(products) || products.length === 0) {
-                    throw new Error("Add at least one product to the products list.");
-                }
-                const ids = new Set();
-                products.forEach((product, index) => {
-                    if (!product || !Number.isInteger(product.id) || ids.has(product.id)
-                        || !["beef", "seafood", "sausages"].includes(product.category)
-                        || typeof product.name !== "string" || !product.name.trim()
-                        || typeof product.desc !== "string" || typeof product.unit !== "string"
-                        || typeof product.image !== "string"
-                        || typeof product.price !== "number" || !Number.isFinite(product.price) || product.price < 0) {
-                        throw new Error(`Product ${index + 1} has invalid fields, category, ID, or price.`);
-                    }
-                    ids.add(product.id);
-                });
-                content.products = products;
-                return content;
-            }
-
-            signInButton.addEventListener("click", async () => {
-                authMessage.textContent = "Signing in…";
-                try {
-                    await signInWithPopup(auth, new GoogleAuthProvider());
-                } catch (error) {
-                    console.error("Admin sign-in failed:", error);
-                    authMessage.textContent = "Google sign-in failed. Check the Firebase Authentication setup and authorized domain.";
+            const response = await fetch(url, {
+                ...options,
+                credentials: "same-origin",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Requested-With": "XMLHttpRequest",
+                    ...options.headers
                 }
             });
+            const responseText = await response.text();
+            let result;
+            try {
+                result = responseText ? JSON.parse(responseText) : {};
+            } catch {
+                if (!response.ok) {
+                    throw new Error(`Hindi ma-access ang login API (HTTP ${response.status}). Patakbuhin ang app gamit ang \`npm.cmd start\` at buksan ang http://127.0.0.1:3000/admin.html.`);
+                }
+                throw new Error("Hindi maintindihan ang tugon ng server. Tiyaking app server ang binuksan.");
+            }
+            if (!response.ok) {
+                if (response.status === 401 && url !== "/api/admin/login") showLogin();
+                throw new Error(result.error || "The request could not be completed.");
+            }
+            return result;
+        }
 
-            document.getElementById("admin-sign-out").addEventListener("click", () => signOut(auth));
+        function showLogin() {
+            dashboard.classList.add("hidden");
+            loginPanel.classList.remove("hidden");
+        }
 
-            contentForm.addEventListener("submit", async event => {
-                event.preventDefault();
+        function showDashboard() {
+            authMessage.textContent = "";
+            loginPanel.classList.add("hidden");
+            dashboard.classList.remove("hidden");
+        }
+
+        function buildContentEditor(content) {
+            const fields = document.getElementById("content-fields");
+            fields.innerHTML = Object.entries(defaultSiteContent)
+                .filter(([key]) => key !== "products")
+                .map(([key]) => `
+                    <label class="block text-sm font-semibold text-slate-700">
+                        ${escapeHtml(key.replace(/([A-Z])/g, " $1").replace(/^./, letter => letter.toUpperCase()))}
+                        <textarea id="content-${escapeHtml(key)}" rows="2" class="mt-1 w-full border border-slate-300 rounded-xl px-3 py-2 font-normal">${escapeHtml(content[key] ?? defaultSiteContent[key])}</textarea>
+                    </label>
+                `).join("");
+            document.getElementById("products-json").value = JSON.stringify(content.products || defaultSiteContent.products, null, 2);
+        }
+
+        async function loadContent() {
+            contentMessage.textContent = "Loading published content…";
+            try {
+                buildContentEditor(await request("/api/admin/content"));
+                contentMessage.textContent = "Published storefront content loaded.";
                 contentMessage.className = "text-sm text-slate-600";
-                try {
-                    const content = readContentForm();
-                    await setDoc(contentRef, { ...content, updatedAt: serverTimestamp() });
-                    contentMessage.textContent = "Storefront changes saved and published.";
-                    contentMessage.className = "text-sm text-emerald-700";
-                } catch (error) {
-                    console.error("Could not save storefront content:", error);
-                    contentMessage.textContent = error.message || "Could not save storefront content. Check your Firestore rules.";
-                    contentMessage.className = "text-sm text-red-700";
-                }
-            });
-
-            onAuthStateChanged(auth, async user => {
-                dashboard.classList.add("hidden");
-                loginPanel.classList.remove("hidden");
-                if (!user) return;
-                if (user.email !== adminEmail || !user.emailVerified) {
-                    authMessage.textContent = user.email !== adminEmail
-                        ? "This account is not authorized to manage the storefront."
-                        : "Verify the administrator email before signing in.";
-                    await signOut(auth);
-                    return;
-                }
-                authMessage.textContent = "";
-                loginPanel.classList.add("hidden");
-                dashboard.classList.remove("hidden");
-                await loadContent();
-                await loadOrders(db);
-            });
-
-            window.loadOrders = () => loadOrders(db);
+            } catch (error) {
+                console.error("Could not load storefront content:", error);
+                contentMessage.textContent = error.message;
+                contentMessage.className = "text-sm text-red-700";
+            }
         }
 
-        const productsList = [
-            { name: "USDA Choice Ribeye Steak", stock: "In Stock (120 kg)" },
-            { name: "Brazilian Ribeye Cuberoll", stock: "In Stock (250 kg)" },
-            { name: "Saikoro Wagyu Cubes", stock: "Low Stock (45 packs)" },
-            { name: "Meltique Porterhouse Cut", stock: "In Stock (85 kg)" },
-            { name: "Atlantic Salmon Fillet", stock: "In Stock (150 kg)" },
-            { name: "Atlantic Salmon Belly", stock: "In Stock (90 kg)" },
-            { name: "Premium Tuna Belly", stock: "In Stock (70 kg)" },
-            { name: "Cheesy Hungarian Sausage", stock: "In Stock (300 packs)" },
-            { name: "Japanese Kurobuta Sausage", stock: "In Stock (180 packs)" }
-        ];
-
-        function renderInventory() {
-            const grid = document.getElementById("inventory-grid");
-            grid.innerHTML = productsList.map(product => `
-                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex justify-between items-center">
-                    <div><h4 class="font-bold text-sm text-dark-900">${escapeHtml(product.name)}</h4>
-                    <span class="text-xs text-emerald-600 font-semibold">${escapeHtml(product.stock)}</span></div>
-                    <button onclick="alert('Stock quantity updated successfully!')" class="bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 text-xs px-3 py-1.5 rounded-lg font-semibold">Update</button>
-                </div>`).join("");
+        function readContentForm() {
+            const content = {};
+            Object.keys(defaultSiteContent).filter(key => key !== "products").forEach(key => {
+                content[key] = document.getElementById(`content-${key}`).value.trim();
+            });
+            try {
+                content.products = JSON.parse(document.getElementById("products-json").value);
+            } catch {
+                throw new Error("Products must be valid JSON.");
+            }
+            return content;
         }
 
-        async function loadOrders(db) {
-            renderInventory();
+        async function loadOrders() {
             const tbody = document.getElementById("orders-table-body");
             tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-400">Loading orders...</td></tr>`;
             try {
-                const querySnapshot = await getDocs(collection(db, "orders"));
-                if (querySnapshot.empty) {
+                const orders = await request("/api/admin/orders");
+                if (orders.length === 0) {
                     tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-400">No orders or inquiries received yet.</td></tr>`;
                     document.getElementById("stat-total-orders").innerText = "0";
                     document.getElementById("stat-wholesale").innerText = "0";
                     return;
                 }
-                let wholesaleCount = 0;
-                tbody.innerHTML = querySnapshot.docs.map(orderDoc => {
-                    const data = orderDoc.data();
-                    if (data.orderType && data.orderType.includes("Wholesale")) wholesaleCount++;
-                    const itemsHtml = Array.isArray(data.items) ? data.items.map(item =>
+                const wholesaleCount = orders.filter(order => order.orderType.includes("Wholesale")).length;
+                tbody.innerHTML = orders.map(order => {
+                    const itemsHtml = order.items.map(item =>
                         `<div class="text-xs">• ${escapeHtml(item.name || "Item")} (${escapeHtml(item.qty || 0)}x)</div>`
-                    ).join("") : "";
+                    ).join("");
                     return `
                         <tr class="hover:bg-slate-50 transition">
-                            <td class="p-4 font-bold text-dark-900">${escapeHtml(data.customerName || "N/A")}</td>
-                            <td class="p-4 text-slate-600">${escapeHtml(data.customerPhone || "N/A")}</td>
-                            <td class="p-4"><span class="bg-brand-50 text-brand-700 text-xs px-2.5 py-1 rounded-md font-semibold">${escapeHtml(data.orderType || "Retail")}</span></td>
+                            <td class="p-4 font-bold text-dark-900">${escapeHtml(order.customerName || "N/A")}</td>
+                            <td class="p-4 text-slate-600">${escapeHtml(order.customerPhone || "N/A")}</td>
+                            <td class="p-4"><span class="bg-brand-50 text-brand-700 text-xs px-2.5 py-1 rounded-md font-semibold">${escapeHtml(order.orderType || "Retail")}</span></td>
                             <td class="p-4">${itemsHtml}</td>
-                            <td class="p-4 font-bold text-dark-900">₱${Number(data.totalAmount || 0).toLocaleString()}</td>
-                            <td class="p-4"><span class="bg-amber-100 text-amber-800 text-xs px-2.5 py-1 rounded-md font-semibold">${escapeHtml(data.status || "Pending")}</span></td>
+                            <td class="p-4 font-bold text-dark-900">₱${Number(order.totalAmount || 0).toLocaleString()}</td>
+                            <td class="p-4"><span class="bg-amber-100 text-amber-800 text-xs px-2.5 py-1 rounded-md font-semibold">${escapeHtml(order.status || "Pending")}</span></td>
                         </tr>`;
                 }).join("");
-                document.getElementById("stat-total-orders").innerText = querySnapshot.size;
+                document.getElementById("stat-total-orders").innerText = orders.length;
                 document.getElementById("stat-wholesale").innerText = wholesaleCount;
             } catch (error) {
                 console.error("Could not load orders:", error);
-                tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-red-500">Could not load orders. Check your Firestore setup and admin rules.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-red-500">${escapeHtml(error.message)}</td></tr>`;
             }
         }
 
-        initializeAdmin();
+        async function loadInventory() {
+            const grid = document.getElementById("inventory-grid");
+            try {
+                const products = await request("/api/admin/inventory");
+                grid.innerHTML = products.map(product => `
+                    <form class="inventory-form bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3" data-product-id="${product.id}">
+                        <div>
+                            <h4 class="font-bold text-sm text-dark-900">${escapeHtml(product.name)}</h4>
+                            <p class="text-xs text-slate-500">Unit: ${escapeHtml(product.unit.replace(/^per\s+/i, ""))}</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <input type="number" min="0" max="999999999.999" step="0.001" value="${product.stockQuantity ?? ""}" aria-label="Stock quantity for ${escapeHtml(product.name)}" placeholder="Not tracked" class="min-w-0 flex-1 border border-slate-300 rounded-lg px-3 py-2 text-sm">
+                            <button type="submit" class="bg-white border border-slate-300 text-slate-700 hover:bg-slate-100 text-xs px-3 py-1.5 rounded-lg font-semibold">Save</button>
+                        </div>
+                    </form>
+                `).join("");
+            } catch (error) {
+                console.error("Could not load inventory:", error);
+                grid.innerHTML = `<p class="text-sm text-red-600">${escapeHtml(error.message)}</p>`;
+            }
+        }
+
+        loginForm.addEventListener("submit", async event => {
+            event.preventDefault();
+            loginButton.disabled = true;
+            authMessage.textContent = "Signing in…";
+            try {
+                await request("/api/admin/login", {
+                    method: "POST",
+                    body: JSON.stringify({
+                        email: document.getElementById("admin-email").value,
+                        password: document.getElementById("admin-password").value
+                    })
+                });
+                document.getElementById("admin-password").value = "";
+                showDashboard();
+                await Promise.all([loadContent(), loadOrders(), loadInventory()]);
+            } catch (error) {
+                console.error("Admin sign-in failed:", error);
+                authMessage.textContent = error.message;
+            } finally {
+                loginButton.disabled = false;
+            }
+        });
+
+        document.getElementById("admin-sign-out").addEventListener("click", async () => {
+            try {
+                await request("/api/admin/logout", { method: "POST", body: "{}" });
+                showLogin();
+            } catch (error) {
+                console.error("Admin sign-out failed:", error);
+                authMessage.textContent = error.message;
+            }
+        });
+
+        document.getElementById("inventory-grid").addEventListener("submit", async event => {
+            const form = event.target;
+            if (!form.matches(".inventory-form")) return;
+            event.preventDefault();
+            const productId = Number(form.dataset.productId);
+            const input = form.querySelector("input");
+            const quantity = input.value.trim() === "" ? null : Number(input.value);
+            const message = document.getElementById("inventory-message");
+            message.textContent = "";
+            try {
+                await request(`/api/admin/inventory/${productId}`, {
+                    method: "PUT",
+                    body: JSON.stringify({ stockQuantity: quantity })
+                });
+                message.textContent = "Inventory quantity saved.";
+                message.className = "text-sm text-emerald-700";
+                await loadInventory();
+            } catch (error) {
+                console.error("Could not save inventory quantity:", error);
+                message.textContent = error.message;
+                message.className = "text-sm text-red-700";
+            }
+        });
+
+        contentForm.addEventListener("submit", async event => {
+            event.preventDefault();
+            contentMessage.className = "text-sm text-slate-600";
+            try {
+                await request("/api/admin/content", {
+                    method: "PUT",
+                    body: JSON.stringify(readContentForm())
+                });
+                contentMessage.textContent = "Storefront changes saved and published.";
+                contentMessage.className = "text-sm text-emerald-700";
+            } catch (error) {
+                console.error("Could not save storefront content:", error);
+                contentMessage.textContent = error.message;
+                contentMessage.className = "text-sm text-red-700";
+            }
+        });
+
+        window.loadOrders = loadOrders;
+
+        try {
+            await request("/api/admin/session");
+            showDashboard();
+            await Promise.all([loadContent(), loadOrders(), loadInventory()]);
+        } catch (error) {
+            if (error.message !== "Please sign in to continue."
+                && error.message !== "Your session has expired. Please sign in again.") {
+                console.error("Could not restore admin session:", error);
+                authMessage.textContent = error.message;
+            }
+        }
     </script>
 </body>
 </html>

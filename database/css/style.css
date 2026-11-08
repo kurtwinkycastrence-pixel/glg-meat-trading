@@ -1,0 +1,504 @@
+::selection {
+    color: #fff;
+    background: #dc2626;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f8f1f0;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #fecaca;
+    border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #ef4444;
+}
+
+.hero-meat-bg {
+    background-image:
+        linear-gradient(180deg, rgba(2, 6, 23, 0.18) 0%, rgba(2, 6, 23, 0.2) 55%, #020617 100%),
+        linear-gradient(90deg, rgba(2, 6, 23, 0.82), rgba(2, 6, 23, 0.42)),
+        url("../assets/images/hero-steak-bg.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.feature-beef-card {
+    background-image:
+        linear-gradient(rgba(2, 6, 23, 0.58), rgba(2, 6, 23, 0.72)),
+        url("../assets/images/steaks-beef-card.png");
+    background-size: cover;
+    background-position: center 46%;
+}
+
+.brand-logo {
+    border: none;
+    background: transparent;
+    box-shadow: none;
+}
+
+.product-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-2px);
+}
+
+:root {
+    color-scheme: dark;
+    --color-ink: #000;
+    --color-surface: #111827;
+    --color-accent: #ef4444;
+    --color-gold: #fbbf24;
+}
+
+html {
+    scroll-padding-top: 6rem;
+}
+
+body {
+    background: var(--color-ink);
+}
+
+body.bg-slate-950 {
+    background: #000;
+}
+
+body.bg-slate-950 .text-white {
+    color: #ddd9d2;
+}
+
+body.bg-slate-950 .text-slate-100 {
+    color: #d2cec7;
+}
+
+body.bg-slate-950 .text-slate-300 {
+    color: #aaa6a0;
+}
+
+body > div.bg-dark-900 {
+    background-color: #080d18;
+    border-color: rgba(148, 163, 184, 0.14);
+}
+
+body > header {
+    border-color: rgba(148, 163, 184, 0.16);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+body > header nav a {
+    position: relative;
+    padding-block: 0.5rem;
+    transition: color 180ms ease;
+}
+
+body > header nav a::after {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    border-radius: 999px;
+    background: var(--color-accent);
+    content: "";
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 180ms ease;
+}
+
+body > header nav a:hover::after,
+body > header nav a:focus-visible::after {
+    transform: scaleX(1);
+}
+
+.brand-logo {
+    flex: none;
+    border-radius: 0.85rem;
+}
+
+.hero-meat-bg {
+    min-height: 590px;
+    background-color: #0b111c;
+    background-position: center, center, 58% center;
+}
+
+.hero-meat-bg h1 {
+    max-width: 13ch;
+    font-size: clamp(2.8rem, 5.2vw, 4.65rem);
+    line-height: 1.04;
+    letter-spacing: -0.055em;
+}
+
+.hero-meat-bg h1 [data-copy="heroHighlight"] {
+    color: #d87980;
+}
+
+.hero-meat-bg > div.relative > div:first-child > p {
+    max-width: 34rem;
+    color: #aaa6a0;
+    line-height: 1.8;
+}
+
+.hero-meat-bg > div.relative > div:first-child > div:first-child {
+    border-color: rgba(253, 186, 116, 0.32);
+    background: rgba(120, 53, 15, 0.3);
+    color: #fde68a;
+    backdrop-filter: blur(12px);
+}
+
+.hero-meat-bg a[href="#products"] {
+    border: 1px solid #ef4444;
+    background: #dc2626;
+    color: #f0e9e3;
+    box-shadow: 0 4px 10px rgba(220, 38, 38, 0.12);
+}
+
+.hero-meat-bg a[href="#products"]:hover {
+    background: #b91c1c;
+}
+
+.hero-meat-bg .grid.grid-cols-2 > div {
+    min-height: 190px;
+    border-color: rgba(255, 255, 255, 0.17);
+    background-color: rgba(15, 23, 42, 0.78);
+    backdrop-filter: blur(12px);
+    transition: transform 220ms ease, border-color 220ms ease, background-color 220ms ease;
+}
+
+.hero-meat-bg .grid.grid-cols-2 > div:hover {
+    border-color: rgba(248, 113, 113, 0.55);
+    background-color: rgba(30, 41, 59, 0.88);
+    transform: translateY(-4px);
+}
+
+#products {
+    position: relative;
+    isolation: isolate;
+    margin-block: 1rem 2rem;
+    padding-block: 5.5rem;
+    background: #000;
+    box-shadow: 0 0 0 100vmax #000;
+}
+
+#products [data-copy="catalogEyebrow"] {
+    color: #d87980;
+}
+
+#products h2 {
+    color: #ddd9d2;
+    letter-spacing: -0.04em;
+}
+
+#products .text-slate-300 {
+    color: #aaa6a0;
+}
+
+#category-filters {
+    justify-content: flex-start;
+}
+
+.cat-btn.bg-slate-900 {
+    border-color: #334155;
+    background: #111827;
+    color: #aaa6a0;
+}
+
+.cat-btn:hover {
+    border-color: #f87171;
+    background: #1e293b;
+    color: #fff;
+}
+
+.cat-btn.active,
+.cat-btn.bg-brand-600 {
+    border-color: #dc2626;
+    background: #dc2626;
+    color: #f0e9e3;
+    box-shadow: 0 2px 6px rgba(220, 38, 38, 0.12);
+}
+
+#search-input {
+    border-color: #334155;
+    background: #111827;
+    color: #f8fafc;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+#search-input::placeholder {
+    color: #94a3b8;
+}
+
+#search-input:focus {
+    border-color: #f87171;
+    box-shadow: 0 0 0 2px rgba(248, 113, 113, 0.1);
+}
+
+.product-card.bg-slate-900 {
+    min-height: 100%;
+    border-color: #273449;
+    background: #111827;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
+}
+
+.product-card.bg-slate-900:hover {
+    border-color: #3b4250;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+.product-card h3 {
+    color: #ddd9d2;
+    letter-spacing: -0.025em;
+}
+
+.product-card p {
+    color: #aaa6a0;
+    font-size: 0.8rem;
+    line-height: 1.65;
+}
+
+.product-card > div:first-child > div:first-child {
+    border: 1px solid #4c2630;
+    background: linear-gradient(145deg, #2b1720, #292016);
+    color: #fca5a5;
+}
+
+.product-card > div:last-child {
+    border-color: #273449;
+}
+
+.product-card > div:last-child .text-lg {
+    color: #ddd9d2;
+}
+
+.product-card > div:last-child button {
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 0.9rem;
+    box-shadow: 0 2px 6px rgba(185, 28, 28, 0.12);
+    transition: transform 180ms ease, background-color 180ms ease;
+}
+
+.product-card > div:last-child button:hover {
+    transform: scale(1.06);
+}
+
+#about .grid > div {
+    border-color: rgba(148, 163, 184, 0.16);
+    background: linear-gradient(145deg, rgba(30, 41, 59, 0.94), rgba(15, 23, 42, 0.9));
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    transition: transform 200ms ease, border-color 200ms ease;
+}
+
+#about .grid > div:hover {
+    border-color: rgba(248, 113, 113, 0.4);
+    transform: translateY(-4px);
+}
+
+#about .grid > div > div:first-child {
+    background: rgba(220, 38, 38, 0.14);
+    color: #fca5a5;
+}
+
+#contact > div {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(148, 163, 184, 0.17);
+    background:
+        radial-gradient(ellipse at 0 0, rgba(127, 29, 29, 0.35), transparent 55%),
+        #101827;
+}
+
+#contact > div > div:last-child {
+    border-color: rgba(148, 163, 184, 0.2);
+    background: rgba(15, 23, 42, 0.72);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
+}
+
+#contact input,
+#contact textarea,
+#cart-drawer input,
+#cart-drawer select {
+    transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+#contact input:focus,
+#contact textarea:focus,
+#cart-drawer input:focus,
+#cart-drawer select:focus {
+    border-color: #f87171;
+    box-shadow: 0 0 0 2px rgba(248, 113, 113, 0.1);
+}
+
+footer {
+    border-color: rgba(148, 163, 184, 0.15);
+}
+
+#cart-drawer > div:last-child > div {
+    border-left: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+body.min-h-screen {
+    background:
+        radial-gradient(ellipse at 50% -20rem, rgba(127, 29, 29, 0.12), transparent 60%),
+        #f1f5f9;
+}
+
+body.min-h-screen > header {
+    background: #0b1120;
+}
+
+#admin-login {
+    padding-top: clamp(4rem, 10vh, 7rem);
+}
+
+#admin-login form,
+#admin-dashboard > section,
+#admin-dashboard > div {
+    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
+}
+
+#admin-login form {
+    border-color: #e2e8f0;
+}
+
+#admin-dashboard input,
+#admin-dashboard textarea {
+    transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+#admin-dashboard input:focus,
+#admin-dashboard textarea:focus {
+    border-color: #dc2626;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12);
+}
+
+:where(a, button, input, select, textarea):focus-visible {
+    outline: 3px solid rgba(248, 113, 113, 0.85);
+    outline-offset: 3px;
+}
+
+@media (max-width: 1199px) {
+    body > header > div.h-20 {
+        height: auto;
+        min-height: 5rem;
+        flex-wrap: wrap;
+        gap: 0.25rem 0.75rem;
+        padding-block: 0.65rem;
+    }
+
+    body > header nav.hidden {
+        display: flex;
+        order: 3;
+        width: 100%;
+        flex-basis: 100%;
+        justify-content: flex-start;
+        gap: 1.25rem;
+        overflow-x: auto;
+        padding-top: 0.25rem;
+        font-size: 0.8rem;
+        white-space: nowrap;
+        scrollbar-width: none;
+    }
+
+    body > header nav::-webkit-scrollbar {
+        display: none;
+    }
+
+    body > header nav a {
+        flex: none;
+    }
+
+    body > header > div > a {
+        gap: 0.6rem;
+    }
+
+    body > header > div > div:last-child {
+        flex: none;
+    }
+}
+
+@media (max-width: 767px) {
+    body > header nav.hidden {
+        font-size: 0.75rem;
+    }
+
+    .hero-meat-bg {
+        min-height: unset;
+        background-position: center, center, 62% center;
+    }
+
+    .hero-meat-bg h1 {
+        font-size: clamp(2.6rem, 12vw, 4rem);
+    }
+
+    .hero-meat-bg .grid.grid-cols-2 > div {
+        min-height: 170px;
+    }
+
+    #products {
+        margin-block: 0;
+        padding-block: 4rem;
+    }
+
+    #category-filters {
+        justify-content: center;
+    }
+
+    #contact > div {
+        border-radius: 1.5rem;
+    }
+}
+
+@media (max-width: 420px) {
+    .hero-meat-bg .grid.grid-cols-2 > div {
+        min-height: 150px;
+        padding: 1rem;
+    }
+
+    .hero-meat-bg .grid.grid-cols-2 > div h3 {
+        font-size: 0.95rem;
+    }
+
+    .hero-meat-bg .grid.grid-cols-2 > div p {
+        font-size: 0.7rem;
+    }
+
+    body > header .brand-logo {
+        width: 2.35rem;
+        height: 2.35rem;
+    }
+
+    body > header [data-copy="brandName"] {
+        font-size: 0.88rem;
+    }
+
+    body > header [data-copy="brandTagline"] {
+        font-size: 0.55rem;
+    }
+
+    body > header > div > div:last-child button {
+        padding: 0.55rem 0.7rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}

@@ -4,14 +4,128 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GLG Meat Trading | Wholesale & Retail Premium Meats & Seafood</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .catalog-category-section + .catalog-category-section {
+            margin-top: 2.5rem;
+        }
+
+        .catalog-category-heading {
+            width: fit-content;
+            min-width: min(17rem, 100%);
+            margin: 0 0 1.25rem;
+            padding-bottom: 0.6rem;
+            border-bottom: 2px solid transparent;
+            border-image: linear-gradient(90deg, #dc2626, rgba(220, 38, 38, 0)) 1;
+            color: #f8fafc;
+            font-size: clamp(1.4rem, 3vw, 1.85rem);
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            line-height: 1.2;
+            text-transform: uppercase;
+        }
+
+        .catalog-category-products {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.9rem;
+        }
+
+        @media (min-width: 640px) {
+            .catalog-category-products {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+
+        .catalog-product-card {
+            overflow: hidden;
+            border: 1px solid #273449;
+            border-radius: 0.9rem;
+            background: #111827;
+            color: #f8fafc;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+        }
+
+        .catalog-product-card:hover {
+            transform: translateY(-2px);
+            border-color: #7f3037;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.34);
+        }
+
+        .catalog-product-image {
+            aspect-ratio: 1;
+            overflow: hidden;
+            margin: 0.45rem 0.45rem 0;
+            border-radius: 0.6rem;
+            background: #1e293b;
+        }
+
+        .catalog-product-info {
+            min-height: 4.6rem;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 0.4rem;
+            padding: 0.55rem 0.65rem 0.65rem;
+            border-top: 1px solid #273449;
+            background: #111827;
+        }
+
+        .catalog-product-copy {
+            min-width: 0;
+        }
+
+        .catalog-product-copy h3,
+        .catalog-product-copy p {
+            overflow-wrap: anywhere;
+            margin: 0;
+            line-height: 1.3;
+        }
+
+        .catalog-product-copy h3 {
+            color: #f1f5f9;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+
+        .catalog-product-copy p {
+            margin-top: 0.12rem;
+            color: #f87171;
+            font-size: 0.76rem;
+            font-weight: 800;
+        }
+
+        .catalog-add-button {
+            width: 2.25rem;
+            height: 2.25rem;
+            flex: none;
+            display: grid;
+            place-items: center;
+            border: 1px solid #71343b;
+            border-radius: 0.55rem;
+            background: #251921;
+            color: #fca5a5;
+            cursor: pointer;
+            transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
+        }
+
+        .catalog-add-button:hover {
+            border-color: #dc2626;
+            background: #dc2626;
+            color: #fff;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .catalog-product-card,
+            .catalog-add-button {
+                transition: none;
+            }
+        }
+    </style>
     <script>
         tailwind.config = {
             theme: {
@@ -28,7 +142,6 @@
 </head>
 <body class="bg-slate-950 text-slate-100 font-sans antialiased">
 
-    <!-- TOP BAR -->
     <div class="bg-dark-900 text-slate-300 text-xs py-2 px-4 border-b border-slate-800">
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
             <div class="flex items-center gap-4">
@@ -42,35 +155,36 @@
         </div>
     </div>
 
-    <!-- NAVBAR -->
     <header class="sticky top-0 z-40 bg-slate-950/95 backdrop-blur border-b border-slate-800 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <a href="#" class="flex items-center gap-3">
-                <img src="glg-meat-trading-logo.png" alt="GLG Meat Trading logo" class="brand-logo w-12 h-12 rounded-xl object-contain shadow-none">
+                <img src="assets/images/logo.jpeg.png" alt="GLG Meat Trading logo" class="brand-logo w-12 h-12 rounded-xl object-contain shadow-none">
                 <div>
                     <span class="text-xl font-extrabold tracking-tight text-white block leading-none" data-copy="brandName">GLG MEAT TRADING</span>
                     <span class="text-xs font-semibold text-brand-600 tracking-wider uppercase mt-1 block" data-copy="brandTagline">Wholesale & Retail Supplier</span>
                 </div>
             </a>
             
-            <nav class="hidden md:flex items-center gap-8 font-medium text-sm text-slate-300">
-                <a href="#products" class="hover:text-brand-600 transition" data-copy="navProducts">Products & Catalog</a>
-                <a href="#about" class="hover:text-brand-600 transition" data-copy="navAbout">Why Choose Us</a>
-                <a href="#contact" class="hover:text-brand-600 transition" data-copy="navContact">Contact & Location</a>
+            <nav class="hidden md:flex items-center gap-8 font-medium text-sm text-slate-300" aria-label="Main navigation">
+                <a href="#home" class="hover:text-brand-600 transition" data-copy="navHome">Home</a>
+                <a href="#products" class="hover:text-brand-600 transition" data-copy="navProducts">Product</a>
+                <a href="#about" class="hover:text-brand-600 transition" data-copy="navAbout">About</a>
+                <a href="#contact" class="hover:text-brand-600 transition" data-copy="navDetails">Details</a>
             </nav>
 
             <div class="flex items-center gap-3">
-                <button onclick="openCart()" class="relative bg-brand-50 border border-brand-200 text-brand-700 hover:bg-brand-100 px-4 py-2.5 rounded-xl font-semibold flex items-center gap-2 transition shadow-sm">
-                    <i class="fa-solid fa-cart-shopping"></i>
-                    <span class="hidden sm:inline" data-copy="cartLabel">My Inquiry / Cart</span>
-                    <span id="cart-badge" class="bg-brand-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span>
+                <a id="customer-login-link" href="customer.html" aria-label="Customer account" title="Customer account" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white w-11 h-11 rounded-xl font-semibold flex items-center justify-center transition">
+                    <i class="fa-solid fa-user" aria-hidden="true"></i>
+                </a>
+                <button type="button" onclick="openCart()" aria-label="Open cart" title="Open cart" class="relative bg-slate-800 border border-slate-700 text-white hover:bg-slate-700 w-11 h-11 rounded-xl font-semibold flex items-center justify-center transition">
+                    <i class="fa-solid fa-cart-shopping" aria-hidden="true"></i>
+                    <span id="cart-badge" class="absolute -top-1.5 -right-1.5 bg-brand-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span>
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- HERO SECTION -->
-    <section class="relative text-white py-20 lg:py-28 overflow-hidden hero-meat-bg">
+    <section id="home" class="relative text-white py-20 lg:py-28 overflow-hidden hero-meat-bg">
         <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fecaca_1px,transparent_1px)] [background-size:16px_16px]"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 grid lg:grid-cols-2 gap-12 items-center">
             <div class="space-y-6">
@@ -117,7 +231,6 @@
         </div>
     </section>
 
-    <!-- PRODUCT CATALOG -->
     <section id="products" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center max-w-3xl mx-auto mb-12 space-y-3">
             <span class="text-brand-600 font-bold text-sm tracking-wider uppercase" data-copy="catalogEyebrow">Our Product Lineup</span>
@@ -125,25 +238,17 @@
             <p class="text-slate-300 text-sm sm:text-base" data-copy="catalogDescription">Add items to your inquiry list or cart to request a quotation or finalize order details.</p>
         </div>
 
-        <!-- Filters & Search -->
         <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
-            <div class="flex flex-wrap gap-2 justify-center" id="category-filters">
-                <button onclick="filterCategory('all', this)" class="cat-btn active bg-brand-600 text-white px-5 py-2.5 rounded-xl font-semibold text-sm transition shadow-sm" data-copy="filterAll">All Products</button>
-                <button onclick="filterCategory('beef', this)" class="cat-btn bg-slate-900 border border-slate-700 text-slate-300 hover:bg-slate-800 px-5 py-2.5 rounded-xl font-semibold text-sm transition" data-copy="filterBeef">Steaks & Beef</button>
-                <button onclick="filterCategory('seafood', this)" class="cat-btn bg-slate-900 border border-slate-700 text-slate-300 hover:bg-slate-800 px-5 py-2.5 rounded-xl font-semibold text-sm transition" data-copy="filterSeafood">Seafood</button>
-                <button onclick="filterCategory('sausages', this)" class="cat-btn bg-slate-900 border border-slate-700 text-slate-300 hover:bg-slate-800 px-5 py-2.5 rounded-xl font-semibold text-sm transition" data-copy="filterSausages">Sausages & Processed</button>
-            </div>
+            <div class="flex flex-wrap gap-2 justify-center" id="category-filters"></div>
             <div class="w-full md:w-72 relative">
                 <i class="fa-solid fa-search absolute left-4 top-3.5 text-slate-400"></i>
                 <input type="text" id="search-input" oninput="searchProducts()" data-placeholder="searchPlaceholder" placeholder="Search meat or seafood..." class="w-full pl-11 pr-4 py-3 bg-slate-900 border border-slate-700 text-white placeholder-slate-400 rounded-xl text-sm focus:outline-none focus:border-brand-600 shadow-sm">
             </div>
         </div>
 
-        <!-- Product Grid -->
-        <div id="product-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+        <div id="product-grid"></div>
     </section>
 
-    <!-- WHY CHOOSE US -->
     <section id="about" class="bg-slate-900 py-20 border-y border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
@@ -170,7 +275,6 @@
         </div>
     </section>
 
-    <!-- CONTACT & LOCATION -->
     <section id="contact" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="bg-dark-900 text-white rounded-3xl p-8 sm:p-12 lg:p-16 grid lg:grid-cols-2 gap-12 items-center shadow-2xl">
             <div class="space-y-6">
@@ -198,7 +302,7 @@
                         <div class="bg-brand-600/20 text-brand-500 w-10 h-10 rounded-xl flex items-center justify-center shrink-0 mt-1"><i class="fa-solid fa-phone"></i></div>
                         <div>
                             <h4 class="font-bold text-white" data-copy="phoneLabel">Direct Line / Viber / WhatsApp</h4>
-                            <p class="text-slate-300 text-sm" data-copy="phoneValue">+63 900 000 0000 / info@glgmeattrading.com</p>
+                            <p class="text-slate-300 text-sm" data-copy="phoneValue">+63 931331813 / info@glgmeattrading.com</p>
                         </div>
                     </div>
                 </div>
@@ -226,18 +330,16 @@
         </div>
     </section>
 
-    <!-- FOOTER -->
     <footer class="bg-dark-900 text-slate-400 border-t border-slate-800 py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="flex items-center gap-3">
-                <img src="glg-meat-trading-logo.png" alt="GLG Meat Trading logo" class="brand-logo w-10 h-10 rounded-xl object-contain shadow-none">
+                <img src="assets/images/logo.jpeg.png" alt="GLG Meat Trading logo" class="brand-logo w-10 h-10 rounded-xl object-contain shadow-none">
                 <span class="text-white font-bold text-lg" data-copy="brandName">GLG MEAT TRADING</span>
             </div>
             <p class="text-xs text-slate-500" data-copy="footerCopyright">&copy; 2026 GLG Meat Trading. All rights reserved. Wholesale & Retail Meats & Seafood Supplier.</p>
         </div>
     </footer>
 
-    <!-- CART DRAWER -->
     <div id="cart-drawer" class="fixed inset-0 z-50 overflow-hidden hidden">
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onclick="closeCart()"></div>
         <div class="absolute inset-y-0 right-0 max-w-full flex pl-10">
@@ -261,7 +363,7 @@
                             <option value="Bulk Ton Order" data-copy="orderBulkOption">Bulk / Ton Order</option>
                         </select>
                         
-                        <button onclick="submitOrderToFirebase()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-brand-600/30 flex items-center justify-center gap-2">
+                        <button onclick="submitOrderToDatabase()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-brand-600/30 flex items-center justify-center gap-2">
                             <i class="fa-solid fa-paper-plane"></i> <span data-copy="orderSubmit">Submit to Admin Dashboard</span>
                         </button>
                         
@@ -275,23 +377,11 @@
     </div>
 
     <script type="module">
-        import { renderProducts } from "./app.js";
-        renderProducts();
-    </script>
-
-    <!-- FIREBASE & APP INIT -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        import { renderProducts, setProducts, products, cart, updateCartUI, closeCart } from "./app.js";
-        import { defaultSiteContent } from "./site-content.js";
-        import { firebaseConfig } from "./firebase-config.js";
-        import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        import { renderProducts, setProducts, setStorefrontCopy, products, cart, updateCartUI, closeCart } from "./js/app.js";
+        import { defaultSiteContent } from "./js/site-content.js";
 
         function applySiteContent(content) {
+            setStorefrontCopy(content);
             document.querySelectorAll("[data-copy]").forEach(element => {
                 const value = content[element.dataset.copy];
                 if (typeof value === "string") element.textContent = value;
@@ -304,17 +394,42 @@
             setProducts(Array.isArray(content.products) ? content.products : defaultSiteContent.products);
         }
 
+        async function request(url, options = {}) {
+            const response = await fetch(url, {
+                ...options,
+                headers: { "Content-Type": "application/json", ...options.headers }
+            });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.error || "The request could not be completed.");
+            return result;
+        }
+
         async function loadSiteContent() {
-            applySiteContent(defaultSiteContent);
             try {
-                const snapshot = await getDoc(doc(db, "siteContent", "public"));
-                if (snapshot.exists()) applySiteContent({ ...defaultSiteContent, ...snapshot.data() });
+                applySiteContent(await request("/api/storefront"));
             } catch (error) {
                 console.error("Could not load published storefront content:", error);
             }
         }
 
-        window.submitOrderToFirebase = async function() {
+        async function loadCustomerSession() {
+            try {
+                const customer = await request("/api/customer/session");
+                document.getElementById("order-name").value = customer.fullName;
+                document.getElementById("order-phone").value = customer.phone;
+                document.querySelectorAll("#customer-login-link span").forEach(label => {
+                    label.textContent = "My Account";
+                });
+            } catch (error) {
+                if (!error.message.startsWith("Please sign in")
+                    && !error.message.startsWith("Your customer session has expired")) {
+                    console.error("Could not restore customer session:", error);
+                }
+            }
+        }
+
+        renderProducts();
+        window.submitOrderToDatabase = async function() {
             if (cart.length === 0) { alert('Your cart is empty.'); return; }
             const name = document.getElementById('order-name').value.trim();
             const phone = document.getElementById('order-phone').value.trim();
@@ -322,53 +437,47 @@
 
             if (!name || !phone) { alert('Please provide your name and contact number.'); return; }
 
-            const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-
             try {
-                await addDoc(collection(db, "orders"), {
+                await request("/api/orders", {
+                    method: "POST",
+                    body: JSON.stringify({
                     customerName: name,
                     customerPhone: phone,
                     orderType: orderType,
-                    items: cart,
-                    totalAmount: total,
-                    status: "Pending",
-                    createdAt: new Date().toISOString()
+                        items: cart.map(item => ({ id: item.id, quantity: item.qty }))
+                    })
                 });
                 alert('Order / Inquiry submitted successfully to GLG Admin Dashboard!');
                 cart.length = 0;
                 updateCartUI();
                 closeCart();
             } catch (e) {
-                console.error(e);
-                alert('Error submitting order. Please check Firebase settings.');
+                console.error("Could not submit order:", e);
+                alert(e.message || 'Error submitting your order. Please try again.');
             }
         };
 
         window.submitQuickInquiry = async function(e) {
             e.preventDefault();
-            const name = document.getElementById('qi-name').value;
-            const phone = document.getElementById('qi-phone').value;
-            const message = document.getElementById('qi-message').value;
+            const name = document.getElementById('qi-name').value.trim();
+            const phone = document.getElementById('qi-phone').value.trim();
+            const message = document.getElementById('qi-message').value.trim();
 
             try {
-                await addDoc(collection(db, "orders"), {
-                    customerName: name,
-                    customerPhone: phone,
-                    orderType: "Quick Inquiry",
-                    items: [{ name: "Inquiry: " + message, qty: 1, price: 0 }],
-                    totalAmount: 0,
-                    status: "Pending Inquiry",
-                    createdAt: new Date().toISOString()
+                await request("/api/inquiries", {
+                    method: "POST",
+                    body: JSON.stringify({ customerName: name, customerPhone: phone, message })
                 });
                 alert('Inquiry sent successfully!');
                 document.getElementById('quick-inquiry-form').reset();
             } catch (err) {
-                console.error(err);
-                alert('Error sending inquiry.');
+                console.error("Could not send inquiry:", err);
+                alert(err.message || 'Error sending your inquiry. Please try again.');
             }
         };
 
         loadSiteContent();
+        loadCustomerSession();
     </script>
 </body>
 </html>
