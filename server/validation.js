@@ -2,6 +2,7 @@ import { defaultSiteContent } from "../js/site-content.js";
 
 const categories = new Set(["beef", "wagyu", "sausages", "imported-steaks", "local-steaks", "seafood"]);
 const orderTypes = new Set(["Retail", "Wholesale", "Bulk Ton Order"]);
+const paymentMethods = new Set(["Cash", "GCash", "PayMaya"]);
 const contentKeys = Object.keys(defaultSiteContent).filter(key => key !== "products");
 
 function isPlainObject(value) {
@@ -35,6 +36,12 @@ export function validateProducts(products) {
             || !Number.isFinite(product.price)
             || product.price < 0
             || product.price > 9999999999
+            || (product.wholesalePrice !== undefined
+                && product.wholesalePrice !== null
+                && (typeof product.wholesalePrice !== "number"
+                    || !Number.isFinite(product.wholesalePrice)
+                    || product.wholesalePrice < 0
+                    || product.wholesalePrice > 9999999999))
             || (product.stockQuantity !== undefined
                 && product.stockQuantity !== null
                 && (typeof product.stockQuantity !== "number"
@@ -50,6 +57,7 @@ export function validateProducts(products) {
             name: product.name.trim(),
             category: product.category,
             price: product.price,
+            wholesalePrice: product.wholesalePrice ?? null,
             unit: product.unit.trim(),
             image: product.image.trim(),
             desc: product.desc.trim(),
@@ -91,6 +99,7 @@ export function validateOrder(input) {
         || !input.customerPhone.trim()
         || input.customerPhone.trim().length > 80
         || !orderTypes.has(input.orderType)
+        || (input.paymentMethod !== undefined && !paymentMethods.has(input.paymentMethod))
         || !Array.isArray(input.items)
         || input.items.length === 0
         || input.items.length > 50) {
@@ -113,6 +122,7 @@ export function validateOrder(input) {
         customerName: input.customerName.trim(),
         customerPhone: input.customerPhone.trim(),
         orderType: input.orderType,
+        paymentMethod: input.paymentMethod || "Cash",
         items
     };
 }

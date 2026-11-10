@@ -18,12 +18,13 @@ const pool = {
     },
     async execute(sql, values = []) {
         if (sql.includes("FROM site_content")) return [[], []];
-        if (sql.includes("SELECT id, name, category, price, unit, image, description, stock_quantity FROM products")) {
+        if (sql.includes("SELECT id, name, category, price, wholesale_price, unit, image, description, stock_quantity FROM products")) {
             return [defaultSiteContent.products.map(product => ({
                 id: product.id,
                 name: product.name,
                 category: product.category,
                 price: product.price,
+                wholesale_price: product.wholesalePrice ?? null,
                 unit: product.unit,
                 image: product.image,
                 description: product.desc,
@@ -48,13 +49,14 @@ const pool = {
         if (sql.includes("SELECT id FROM products WHERE id = ?")) {
             return [stockQuantities.has(values[0]) ? [{ id: values[0] }] : [], []];
         }
-        if (sql.includes("SELECT id, name, price FROM products")) {
+        if (sql.includes("SELECT id, name, price, wholesale_price FROM products")) {
             return [defaultSiteContent.products
                 .filter(product => values.includes(product.id))
                 .map(product => ({
                     id: product.id,
                     name: product.name,
-                    price: product.id === 1 ? 950 : product.price
+                    price: product.id === 1 ? 950 : product.price,
+                    wholesale_price: product.wholesalePrice ?? null
                 })), []];
         }
         if (sql.includes("SELECT id, email, password_hash FROM admins")) {
@@ -98,6 +100,7 @@ const pool = {
                 customer_name: order.customerName,
                 customer_phone: order.customerPhone,
                 order_type: order.orderType,
+                payment_method: order.paymentMethod,
                 total_amount: order.totalAmount,
                 status: order.status,
                 created_at: new Date(),
@@ -135,8 +138,9 @@ const pool = {
                         customerName: values[1],
                         customerPhone: values[2],
                         orderType: values[3],
-                        totalAmount: values[4],
-                        status: values[5],
+                        paymentMethod: values[4],
+                        totalAmount: values[5],
+                        status: values[6],
                         items: []
                     });
                     return [{ insertId: id }, []];
@@ -209,6 +213,7 @@ test("rejects malformed order data and calculates order totals from stored price
             customerName: "Customer",
             customerPhone: "09123456789",
             orderType: "Retail",
+            paymentMethod: "GCash",
             totalAmount: 0,
             items: [{ id: 1, quantity: 2, price: 0 }]
         })
@@ -217,7 +222,43 @@ test("rejects malformed order data and calculates order totals from stored price
     assert.equal(response.status, 201);
     assert.equal(orders.at(-1).totalAmount, 1900);
     assert.equal(orders.at(-1).customerId, null);
+    assert.equal(orders.at(-1).paymentMethod, "GCash");
     assert.equal(result.id, orders.at(-1).id);
+});
+
+test("applies retail and wholesale prices to Hungarian sausages", async () => {
+    for (const [orderType, quantity, expectedTotal] of [
+        ["Retail", 9, 3150],
+        ["Retail", 10, 3000],
+        ["Wholesale", 1, 300],
+        ["Bulk Ton Order", 10, 3000]
+    ]) {
+        const response = await fetch(`${baseUrl}/api/orders`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                customerName: "Customer",
+                customerPhone: "09123456789",
+                orderType,
+                items: [{ id: 3, quantity }]
+            })
+        });
+        assert.equal(response.status, 201);
+        assert.equal(orders.at(-1).totalAmount, expectedTotal);
+    }
+
+    const splitProducts = await fetch(`${baseUrl}/api/orders`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            customerName: "Customer",
+            customerPhone: "09123456789",
+            orderType: "Retail",
+            items: [{ id: 3, quantity: 5 }, { id: 4, quantity: 5 }]
+        })
+    });
+    assert.equal(splitProducts.status, 201);
+    assert.equal(orders.at(-1).totalAmount, 3500);
 });
 
 test("keeps customer accounts separate and links signed-in orders to customer history", async () => {

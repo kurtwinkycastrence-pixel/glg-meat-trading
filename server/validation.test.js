@@ -15,12 +15,23 @@ test("validates and normalizes storefront products", () => {
     assert.equal(product.desc, defaultSiteContent.products[0].desc);
     assert.equal(product.stockQuantity, null);
     assert.equal(validateProducts([{ ...defaultSiteContent.products[0], stockQuantity: 12.5 }])[0].stockQuantity, 12.5);
+    assert.equal(validateProducts([defaultSiteContent.products[2]])[0].wholesalePrice, 300);
+    assert.throws(() => validateProducts([{
+        ...defaultSiteContent.products[2],
+        wholesalePrice: -1
+    }]), /price/);
 });
 
-test("includes the updated catalog with separate cut-count options and placeholder prices", () => {
+test("includes the updated catalog with separate cut-count options and sausage pricing", () => {
     const products = defaultSiteContent.products;
     assert.equal(products.length, 35);
-    assert.ok(products.every(product => product.price === 0));
+    assert.ok(products.filter(product => !["Hungarian Cheese", "Hungarian Spicy"].includes(product.name))
+        .every(product => product.price === 0));
+    assert.deepEqual(
+        products.filter(product => ["Hungarian Cheese", "Hungarian Spicy"].includes(product.name))
+            .map(product => [product.price, product.wholesalePrice, product.unit]),
+        [[350, 300, "1 kg"], [350, 300, "1 kg"]]
+    );
     assert.deepEqual(
         products.filter(product => product.name.startsWith("Mondelli Ribeye")).map(product => product.unit),
         ["2 cuts", "3 cuts", "4 cuts", "5 cuts"]
@@ -79,9 +90,11 @@ test("normalizes valid orders and rejects invalid quantities", () => {
         customerName: "  Customer  ",
         customerPhone: " 09123456789 ",
         orderType: "Retail",
+        paymentMethod: "GCash",
         items: [{ id: 1, quantity: 2 }]
     });
     assert.equal(order.customerName, "Customer");
+    assert.equal(order.paymentMethod, "GCash");
     assert.deepEqual(order.items, [{ id: 1, quantity: 2 }]);
     assert.throws(() => validateOrder({
         customerName: "Customer",
@@ -89,6 +102,13 @@ test("normalizes valid orders and rejects invalid quantities", () => {
         orderType: "Retail",
         items: [{ id: 1, quantity: 0 }]
     }), /valid product ID and quantity/);
+    assert.throws(() => validateOrder({
+        customerName: "Customer",
+        customerPhone: "09123456789",
+        orderType: "Retail",
+        paymentMethod: "Crypto",
+        items: [{ id: 1, quantity: 1 }]
+    }), /valid item/);
 });
 
 test("requires contact details and a non-empty inquiry message", () => {

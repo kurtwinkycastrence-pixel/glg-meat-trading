@@ -1,0 +1,179 @@
+:root {
+    color-scheme: light;
+}
+
+body {
+    background-color: #fff !important;
+    color: #1f2937 !important;
+}
+
+.bg-slate-950,
+.bg-slate-950\/95,
+.bg-slate-950\/60,
+.bg-slate-900,
+.bg-dark-900,
+.bg-slate-100 {
+    background-color: #fff !important;
+}
+
+.bg-slate-800 {
+    background-color: #f8fafc !important;
+}
+
+.hover\:bg-slate-800:hover,
+.hover\:bg-slate-700:hover,
+.hover\:bg-slate-200:hover {
+    background-color: #f1f5f9 !important;
+}
+
+.border-slate-800,
+.border-slate-700,
+.border-slate-600 {
+    border-color: #e2e8f0 !important;
+}
+
+.text-white:not(.bg-brand-600):not(.bg-brand-700):not(.bg-red-600):not(.bg-red-700):not(.bg-emerald-600):not(.bg-emerald-700) {
+    color: #1f2937 !important;
+}
+
+.text-white\/90 {
+    color: #334155 !important;
+}
+
+.text-white\/80 {
+    color: #475569 !important;
+}
+
+.text-slate-100,
+.text-slate-200,
+.text-slate-300 {
+    color: #334155 !important;
+}
+
+.text-slate-400,
+.text-slate-500 {
+    color: #64748b !important;
+}
+
+.text-red-400 {
+    color: #b91c1c !important;
+}
+
+.hover\:text-red-300:hover {
+    color: #991b1b !important;
+}
+
+input,
+textarea,
+select {
+    color-scheme: light;
+}
+
+.hero-feature-card {
+    border-color: #e2e8f0 !important;
+    background: rgba(255, 255, 255, 0.94) !important;
+    color: #1f2937 !important;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08) !important;
+}
+
+.hero-feature-image {
+    background: #f1f5f9 !important;
+}
+
+#home {
+    background: #f8fafc !important;
+    color: #1f2937 !important;
+}
+
+.catalog-category-heading {
+    color: #111827 !important;
+}
+
+.catalog-product-card {
+    border-color: #e2e8f0 !important;
+    background: #fff !important;
+    color: #1f2937 !important;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08) !important;
+}
+
+.catalog-product-card:hover {
+    border-color: #dc2626 !important;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12) !important;
+}
+
+.catalog-product-image {
+    background: #f8fafc !important;
+}
+
+.catalog-product-image--photo {
+    position: relative;
+}
+
+.catalog-product-image--photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.catalog-product-image--hungarian-cheese img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 160%;
+    height: 160%;
+    max-width: none;
+    transform: translate(-50%, -50%);
+}
+
+.catalog-product-image--salmon-crazycut img {
+    transform: scale(1.6);
+}
+
+.catalog-product-image--saikoro img {
+    transform: scale(1.25);
+}
+
+.catalog-product-image--kuchidoke img {
+    transform: scale(1.25);
+}
+
+.catalog-product-image--porterhouse img {
+    transform: scale(1.25);
+}
+
+.catalog-product-image--tuna-belly img {
+    transform: scale(1.25);
+}
+
+.catalog-product-image--tuna-panga img {
+    transform: scale(1.25);
+}
+
+.catalog-product-image--salmon-belly img {
+    transform: scale(1.75);
+}
+
+.catalog-product-info {
+    border-color: #e2e8f0 !important;
+    background: #fff !important;
+}
+
+.catalog-product-copy h3 {
+    color: #1f2937 !important;
+}
+
+.catalog-product-copy p {
+    color: #b91c1c !important;
+}
+
+.catalog-add-button {
+    border-color: #fecaca !important;
+    background: #fff !important;
+    color: #b91c1c !important;
+}
+
+.catalog-add-button:hover {
+    border-color: #dc2626 !important;
+    background: #dc2626 !important;
+    color: #fff !important;
+}

@@ -112,13 +112,14 @@
                             <th class="p-4">Customer</th>
                             <th class="p-4">Contact</th>
                             <th class="p-4">Type</th>
+                            <th class="p-4">Payment Method</th>
                             <th class="p-4">Items Ordered / Inquiry</th>
                             <th class="p-4">Total Amount</th>
                             <th class="p-4">Status</th>
                         </tr>
                     </thead>
                     <tbody id="orders-table-body" class="divide-y divide-slate-100 text-sm">
-                        <tr><td colspan="6" class="p-8 text-center text-slate-400">Loading orders from database...</td></tr>
+                        <tr><td colspan="7" class="p-8 text-center text-slate-400">Loading orders from database...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -240,11 +241,11 @@
 
         async function loadOrders() {
             const tbody = document.getElementById("orders-table-body");
-            tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-400">Loading orders...</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-slate-400">Loading orders...</td></tr>`;
             try {
                 const orders = await request("/api/admin/orders");
                 if (orders.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-400">No orders or inquiries received yet.</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-slate-400">No orders or inquiries received yet.</td></tr>`;
                     document.getElementById("stat-total-orders").innerText = "0";
                     document.getElementById("stat-wholesale").innerText = "0";
                     return;
@@ -259,6 +260,7 @@
                             <td class="p-4 font-bold text-dark-900">${escapeHtml(order.customerName || "N/A")}</td>
                             <td class="p-4 text-slate-600">${escapeHtml(order.customerPhone || "N/A")}</td>
                             <td class="p-4"><span class="bg-brand-50 text-brand-700 text-xs px-2.5 py-1 rounded-md font-semibold">${escapeHtml(order.orderType || "Retail")}</span></td>
+                            <td class="p-4">${escapeHtml(order.paymentMethod || "Cash")}</td>
                             <td class="p-4">${itemsHtml}</td>
                             <td class="p-4 font-bold text-dark-900">₱${Number(order.totalAmount || 0).toLocaleString()}</td>
                             <td class="p-4"><span class="bg-amber-100 text-amber-800 text-xs px-2.5 py-1 rounded-md font-semibold">${escapeHtml(order.status || "Pending")}</span></td>
@@ -268,7 +270,7 @@
                 document.getElementById("stat-wholesale").innerText = wholesaleCount;
             } catch (error) {
                 console.error("Could not load orders:", error);
-                tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-red-500">${escapeHtml(error.message)}</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-red-500">${escapeHtml(error.message)}</td></tr>`;
             }
         }
 

@@ -5,6 +5,16 @@ let storefrontCopy = defaultSiteContent;
 
 export let cart = [];
 let currentFilter = 'all';
+const automaticWholesaleProducts = new Set(["Hungarian Cheese", "Hungarian Spicy"]);
+
+function priceForOrderType(product, orderType, quantity = 1) {
+    const automaticWholesale = automaticWholesaleProducts.has(product.name) && quantity >= 10;
+    return (orderType === 'Wholesale' || automaticWholesale)
+        && product.wholesalePrice !== null
+        && product.wholesalePrice !== undefined
+        ? Number(product.wholesalePrice)
+        : Number(product.price);
+}
 
 const categoryLabels = {
     beef: "Beef",
@@ -80,22 +90,40 @@ export function renderProducts(filter = 'all', searchQuery = '') {
     }
 
     const categories = [...new Set(filtered.map(product => product.category))];
+    const orderType = document.getElementById('order-type')?.value || 'Retail';
     categories.forEach(category => {
         const categoryProducts = filtered.filter(product => product.category === category);
-        const cards = categoryProducts.map(p => `
+        const cards = categoryProducts.map(p => {
+            const cartQuantity = cart.find(item => item.id === p.id)?.qty || 1;
+            const imagePath = p.name.startsWith("Porterhouse")
+                ? "assets/images/porterhouse.png"
+                : ({
+                "Hungarian Cheese": "assets/images/cheese.png",
+                "Saikoro Wagyu": "assets/images/saikoro.png",
+                "Kuchidoke": "assets/images/kuchidoke.png",
+                "Tuna Belly": "assets/images/tuna-belly.png",
+                "Tuna Panga": "assets/images/tuna-panga.png",
+                "Salmon Fillet": "assets/images/salmon-fillet.png",
+                "Salmon Belly": "assets/images/salmon-belly.png",
+                "Salmon Crazycut": "assets/images/salmon-cut.png"
+            }[p.name]);
+            return `
             <article class="catalog-product-card">
-                <div class="catalog-product-image" aria-hidden="true"></div>
+                <div class="catalog-product-image${imagePath ? ' catalog-product-image--photo' : ''}${p.name === "Hungarian Cheese" ? ' catalog-product-image--hungarian-cheese' : ''}${p.name === "Salmon Crazycut" ? ' catalog-product-image--salmon-crazycut' : ''}${p.name === "Saikoro Wagyu" ? ' catalog-product-image--saikoro' : ''}${p.name === "Kuchidoke" ? ' catalog-product-image--kuchidoke' : ''}${p.name.startsWith("Porterhouse") ? ' catalog-product-image--porterhouse' : ''}${p.name === "Tuna Belly" ? ' catalog-product-image--tuna-belly' : ''}${p.name === "Tuna Panga" ? ' catalog-product-image--tuna-panga' : ''}${p.name === "Salmon Belly" ? ' catalog-product-image--salmon-belly' : ''}" aria-hidden="true">
+                    ${imagePath ? `<img src="${imagePath}" alt="" loading="lazy">` : ''}
+                </div>
                 <div class="catalog-product-info">
                     <div class="catalog-product-copy">
                         <h3>${escapeHtml(p.name)}</h3>
-                        <p>₱${Number(p.price).toLocaleString()}</p>
+                        <p>₱${priceForOrderType(p, orderType, cartQuantity).toLocaleString()}${p.unit === '1 kg' ? ' / kg' : ''}</p>
                     </div>
                     <button type="button" onclick="addToCart(${p.id})" aria-label="Add ${escapeHtml(p.name)} to cart" title="Add to cart" class="catalog-add-button">
                         <i class="fa-solid fa-cart-shopping" aria-hidden="true"></i>
                     </button>
                 </div>
             </article>
-        `).join('');
+        `;
+        }).join('');
 
         grid.insertAdjacentHTML('beforeend', `
             <section class="catalog-category-section" aria-labelledby="category-${escapeHtml(category)}">
@@ -123,6 +151,7 @@ export function addToCart(id) {
     if (existing) existing.qty += 1;
     else cart.push({ ...product, qty: 1 });
     updateCartUI();
+    renderProducts(currentFilter, document.getElementById('search-input')?.value || '');
     openCart();
 }
 
@@ -144,12 +173,19 @@ export function updateCartUI() {
     let total = 0;
 
     cart.forEach((item, index) => {
-        total += item.price * item.qty;
+        const product = products.find(candidate => candidate.id === item.id) || item;
+        const orderType = document.getElementById('order-type')?.value || 'Retail';
+        const price = priceForOrderType(product, orderType, item.qty);
+        total += price * item.qty;
+        const automaticWholesale = orderType !== 'Wholesale'
+            && automaticWholesaleProducts.has(product.name)
+            && item.qty >= 10;
         container.innerHTML += `
             <div class="flex items-center justify-between bg-slate-800 p-4 rounded-xl border border-slate-700">
                 <div>
                     <h4 class="font-bold text-sm text-white">${escapeHtml(item.name)}</h4>
-                    <span class="text-xs text-slate-400">₱${Number(item.price).toLocaleString()} ${escapeHtml(item.unit)}</span>
+                    <span class="text-xs text-slate-400">₱${price.toLocaleString()} / ${escapeHtml(item.unit)}</span>
+                    ${automaticWholesale ? '<span class="block text-xs text-emerald-700">Wholesale price applied (10 kg+)</span>' : ''}
                 </div>
                 <div class="flex items-center gap-3">
                     <div class="flex items-center border border-slate-700 rounded-lg bg-slate-900">
@@ -169,11 +205,13 @@ export function changeQty(index, delta) {
     cart[index].qty += delta;
     if (cart[index].qty <= 0) cart.splice(index, 1);
     updateCartUI();
+    renderProducts(currentFilter, document.getElementById('search-input')?.value || '');
 }
 
 export function removeItem(index) {
     cart.splice(index, 1);
     updateCartUI();
+    renderProducts(currentFilter, document.getElementById('search-input')?.value || '');
 }
 
 export function openCart() { document.getElementById('cart-drawer')?.classList.remove('hidden'); }
@@ -184,17 +222,23 @@ export function sendViaWhatsApp() {
     const name = document.getElementById('order-name')?.value.trim() || 'Valued Customer';
     const phone = document.getElementById('order-phone')?.value.trim() || 'N/A';
     const orderType = document.getElementById('order-type')?.value || 'Retail';
+    const paymentMethod = document.getElementById('payment-method')?.value || 'Cash';
 
     let msg = `*${storefrontCopy.whatsappOrderTitle}*\n`;
     msg += `*${storefrontCopy.whatsappNameLabel}:* ${name}\n`;
     msg += `*${storefrontCopy.whatsappContactLabel}:* ${phone}\n`;
-    msg += `*${storefrontCopy.whatsappTypeLabel}:* ${orderType}\n\n*${storefrontCopy.whatsappItemsLabel}:*\n`;
+    msg += `*${storefrontCopy.whatsappTypeLabel}:* ${orderType}\n`;
+    msg += `*Mode of Payment:* ${paymentMethod}\n\n*${storefrontCopy.whatsappItemsLabel}:*\n`;
     
     cart.forEach(i => {
-        msg += `- ${i.name} (${i.qty}x) @ ₱${i.price}\n`;
+        const product = products.find(candidate => candidate.id === i.id) || i;
+        msg += `- ${i.name} (${i.qty}x ${i.unit}) @ ₱${priceForOrderType(product, orderType, i.qty)} / ${i.unit}\n`;
     });
 
-    const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+    const total = cart.reduce((sum, item) => {
+        const product = products.find(candidate => candidate.id === item.id) || item;
+        return sum + priceForOrderType(product, orderType, item.qty) * item.qty;
+    }, 0);
     msg += `\n*${storefrontCopy.whatsappTotalLabel}:* ₱${total.toLocaleString()}`;
 
     const query = new URLSearchParams({ text: msg });
@@ -209,3 +253,8 @@ window.removeItem = removeItem;
 window.openCart = openCart;
 window.closeCart = closeCart;
 window.sendViaWhatsApp = sendViaWhatsApp;
+
+document.getElementById('order-type')?.addEventListener('change', () => {
+    renderProducts(currentFilter, document.getElementById('search-input')?.value || '');
+    updateCartUI();
+});

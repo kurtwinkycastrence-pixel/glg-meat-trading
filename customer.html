@@ -179,6 +179,7 @@
                             <span class="text-sm text-slate-400">${escapeHtml(createdAt)}</span>
                         </div>
                         <p class="text-sm text-slate-300 mt-1">${escapeHtml(order.orderType)} · ${escapeHtml(order.status)}</p>
+                        <p class="text-sm text-slate-600 mt-1">Payment: ${escapeHtml(order.paymentMethod || "Cash")}</p>
                         <ul class="text-sm text-slate-200 mt-3 list-disc list-inside">${items}</ul>
                         <p class="font-bold mt-3">Total: ₱${Number(order.totalAmount).toLocaleString()}</p>
                     </article>`;

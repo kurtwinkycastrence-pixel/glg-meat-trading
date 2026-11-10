@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS products (
     name TEXT NOT NULL,
     category TEXT NOT NULL,
     price NUMERIC(12, 2) NOT NULL CHECK (price >= 0),
+    wholesale_price NUMERIC(12, 2) CHECK (wholesale_price IS NULL OR wholesale_price >= 0),
     unit TEXT NOT NULL,
     image TEXT NOT NULL,
     description TEXT NOT NULL,
@@ -10,6 +11,8 @@ CREATE TABLE IF NOT EXISTS products (
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+ALTER TABLE products ADD COLUMN IF NOT EXISTS wholesale_price NUMERIC(12, 2) CHECK (wholesale_price IS NULL OR wholesale_price >= 0);
 
 CREATE TABLE IF NOT EXISTS site_content (
     content_key TEXT PRIMARY KEY,
@@ -62,10 +65,13 @@ CREATE TABLE IF NOT EXISTS orders (
     customer_name TEXT NOT NULL,
     customer_phone TEXT NOT NULL,
     order_type TEXT NOT NULL CHECK (order_type IN ('Retail', 'Wholesale', 'Bulk Ton Order', 'Quick Inquiry')),
+    payment_method TEXT NOT NULL DEFAULT 'Cash' CHECK (payment_method IN ('Cash', 'GCash', 'PayMaya')),
     total_amount NUMERIC(14, 2) NOT NULL DEFAULT 0,
     status TEXT NOT NULL DEFAULT 'Pending',
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+ALTER TABLE orders ADD COLUMN IF NOT EXISTS payment_method TEXT NOT NULL DEFAULT 'Cash' CHECK (payment_method IN ('Cash', 'GCash', 'PayMaya'));
 
 CREATE INDEX IF NOT EXISTS orders_created_at ON orders (created_at);
 CREATE INDEX IF NOT EXISTS orders_customer ON orders (customer_id);

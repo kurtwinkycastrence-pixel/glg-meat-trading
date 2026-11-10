@@ -78,6 +78,9 @@ function normalizeProduct(row) {
         name: row.name,
         category: row.category,
         price: Number(row.price),
+        wholesalePrice: row.wholesale_price === null || row.wholesale_price === undefined
+            ? null
+            : Number(row.wholesale_price),
         unit: row.unit,
         image: row.image,
         desc: row.description,
@@ -93,6 +96,7 @@ function normalizeOrder(row) {
         customerName: row.customer_name,
         customerPhone: row.customer_phone,
         orderType: row.order_type,
+        paymentMethod: row.payment_method || "Cash",
         totalAmount: Number(row.total_amount),
         status: row.status,
         createdAt: row.created_at,
@@ -164,7 +168,7 @@ export function createApp({
                 "SELECT content_key, content_value FROM site_content"
             );
             const [productRows] = await pool.execute(
-                "SELECT id, name, category, price, unit, image, description, stock_quantity FROM products ORDER BY id"
+                "SELECT id, name, category, price, wholesale_price, unit, image, description, stock_quantity FROM products ORDER BY id"
             );
             const content = { ...defaultSiteContent, products: productRows.map(normalizeProduct) };
             for (const row of contentRows) content[row.content_key] = row.content_value;
@@ -180,8 +184,8 @@ export function createApp({
         try {
             await connection.beginTransaction();
             const [insertResult] = await connection.execute(
-                "INSERT INTO orders (customer_id, customer_name, customer_phone, order_type, total_amount, status) VALUES (?, ?, ?, ?, ?, ?) RETURNING id",
-                [customerId, order.customerName, order.customerPhone, order.orderType, totalAmount, order.orderType === "Quick Inquiry" ? "Pending Inquiry" : "Pending"]
+                "INSERT INTO orders (customer_id, customer_name, customer_phone, order_type, payment_method, total_amount, status) VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id",
+                [customerId, order.customerName, order.customerPhone, order.orderType, order.paymentMethod || "Cash", totalAmount, order.orderType === "Quick Inquiry" ? "Pending Inquiry" : "Pending"]
             );
             for (const item of items) {
                 await connection.execute(
@@ -239,7 +243,7 @@ export function createApp({
             const productIds = [...new Set(order.items.map(item => item.id))];
             const placeholders = productIds.map(() => "?").join(", ");
             const [rows] = await pool.execute(
-                `SELECT id, name, price FROM products WHERE id IN (${placeholders})`,
+                `SELECT id, name, price, wholesale_price FROM products WHERE id IN (${placeholders})`,
                 productIds
             );
             const products = new Map(rows.map(row => [Number(row.id), row]));
@@ -249,11 +253,16 @@ export function createApp({
             }
             const items = order.items.map(item => {
                 const product = products.get(item.id);
+                const qualifiesForAutomaticWholesale = ["Hungarian Cheese", "Hungarian Spicy"].includes(product.name)
+                    && item.quantity >= 10;
                 return {
                     productId: item.id,
                     name: product.name,
                     quantity: item.quantity,
-                    price: Number(product.price)
+                    price: (order.orderType === "Wholesale" || qualifiesForAutomaticWholesale)
+                        && product.wholesale_price !== null
+                        ? Number(product.wholesale_price)
+                        : Number(product.price)
                 };
             });
             const totalCents = items.reduce(
@@ -443,7 +452,7 @@ export function createApp({
     customer.get("/orders", async (request, response) => {
         try {
             const [rows] = await pool.execute(
-                "SELECT orders.id, orders.customer_name, orders.customer_phone, orders.order_type, orders.total_amount, orders.status, orders.created_at, order_items.product_name, order_items.quantity, order_items.unit_price FROM orders LEFT JOIN order_items ON order_items.order_id = orders.id WHERE orders.customer_id = ? ORDER BY orders.created_at DESC, orders.id DESC",
+                "SELECT orders.id, orders.customer_name, orders.customer_phone, orders.order_type, orders.payment_method, orders.total_amount, orders.status, orders.created_at, order_items.product_name, order_items.quantity, order_items.unit_price FROM orders LEFT JOIN order_items ON order_items.order_id = orders.id WHERE orders.customer_id = ? ORDER BY orders.created_at DESC, orders.id DESC",
                 [request.customer.id]
             );
             const orders = new Map();
@@ -557,7 +566,7 @@ export function createApp({
                 "SELECT content_key, content_value FROM site_content"
             );
             const [productRows] = await pool.execute(
-                "SELECT id, name, category, price, unit, image, description, stock_quantity FROM products ORDER BY id"
+                "SELECT id, name, category, price, wholesale_price, unit, image, description, stock_quantity FROM products ORDER BY id"
             );
             const content = { ...defaultSiteContent, products: productRows.map(normalizeProduct) };
             for (const row of contentRows) content[row.content_key] = row.content_value;
@@ -589,8 +598,8 @@ export function createApp({
             }
             for (const product of products) {
                 await connection.execute(
-                    "INSERT INTO products (id, name, category, price, unit, image, description, stock_quantity) VALUES (?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET name = excluded.name, category = excluded.category, price = excluded.price, unit = excluded.unit, image = excluded.image, description = excluded.description",
-                    [product.id, product.name, product.category, product.price, product.unit, product.image, product.desc, product.stockQuantity]
+                    "INSERT INTO products (id, name, category, price, wholesale_price, unit, image, description, stock_quantity) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET name = excluded.name, category = excluded.category, price = excluded.price, wholesale_price = excluded.wholesale_price, unit = excluded.unit, image = excluded.image, description = excluded.description",
+                    [product.id, product.name, product.category, product.price, product.wholesalePrice, product.unit, product.image, product.desc, product.stockQuantity]
                 );
             }
             const productIds = products.map(product => product.id);
@@ -660,7 +669,7 @@ export function createApp({
     admin.get("/orders", async (request, response) => {
         try {
             const [rows] = await pool.execute(
-                "SELECT orders.id, orders.customer_name, orders.customer_phone, orders.order_type, orders.total_amount, orders.status, orders.created_at, order_items.product_name, order_items.quantity, order_items.unit_price FROM orders LEFT JOIN order_items ON order_items.order_id = orders.id ORDER BY orders.created_at DESC, orders.id DESC"
+                "SELECT orders.id, orders.customer_name, orders.customer_phone, orders.order_type, orders.payment_method, orders.total_amount, orders.status, orders.created_at, order_items.product_name, order_items.quantity, order_items.unit_price FROM orders LEFT JOIN order_items ON order_items.order_id = orders.id ORDER BY orders.created_at DESC, orders.id DESC"
             );
             const orders = new Map();
             for (const row of rows) {

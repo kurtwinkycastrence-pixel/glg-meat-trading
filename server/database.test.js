@@ -23,8 +23,13 @@ test("embedded PostgreSQL setup seeds the store and supports customer and admin 
 
     await setupDatabase(pool);
     await setupDatabase(pool);
-    const [products] = await pool.execute("SELECT id, name FROM products ORDER BY id");
+    const [products] = await pool.execute("SELECT id, name, price, wholesale_price, unit FROM products ORDER BY id");
     assert.equal(products.length, defaultSiteContent.products.length);
+    for (const product of products.filter(item => ["Hungarian Cheese", "Hungarian Spicy"].includes(item.name))) {
+        assert.equal(Number(product.price), 350);
+        assert.equal(Number(product.wholesale_price), 300);
+        assert.equal(product.unit, "1 kg");
+    }
 
     await pool.execute(
         "INSERT INTO admins (email, password_hash) VALUES (?, ?)",

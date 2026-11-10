@@ -433,6 +433,12 @@
                             <option value="Wholesale" data-copy="orderWholesaleOption">Wholesale / Restaurant Supply</option>
                             <option value="Bulk Ton Order" data-copy="orderBulkOption">Bulk / Ton Order</option>
                         </select>
+                        <label for="payment-method" class="block text-xs font-semibold text-slate-600">Mode of Payment</label>
+                        <select id="payment-method" class="w-full bg-slate-900 text-white border border-slate-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-600">
+                            <option value="Cash">Cash</option>
+                            <option value="GCash">GCash</option>
+                            <option value="PayMaya">PayMaya (Maya)</option>
+                        </select>
                         
                         <button onclick="submitOrderToDatabase()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-brand-600/30 flex items-center justify-center gap-2">
                             <i class="fa-solid fa-paper-plane"></i> <span data-copy="orderSubmit">Submit to Admin Dashboard</span>
@@ -505,6 +511,7 @@
             const name = document.getElementById('order-name').value.trim();
             const phone = document.getElementById('order-phone').value.trim();
             const orderType = document.getElementById('order-type').value;
+            const paymentMethod = document.getElementById('payment-method').value;
 
             if (!name || !phone) { alert('Please provide your name and contact number.'); return; }
 
@@ -515,6 +522,7 @@
                     customerName: name,
                     customerPhone: phone,
                     orderType: orderType,
+                    paymentMethod,
                         items: cart.map(item => ({ id: item.id, quantity: item.qty }))
                     })
                 });

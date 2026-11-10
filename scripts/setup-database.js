@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { createPool } from "../server/database.js";
+import { migrateWholesalePrices } from "../server/migrations.js";
 import { defaultSiteContent } from "../js/site-content.js";
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
@@ -22,8 +23,8 @@ export async function setupDatabase(pool) {
         if (catalogMigrations.length === 0) {
             for (const product of defaultSiteContent.products) {
                 await connection.execute(
-                    "INSERT INTO products (id, name, category, price, unit, image, description) VALUES (?, ?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET name = excluded.name, category = excluded.category, price = excluded.price, unit = excluded.unit, image = excluded.image, description = excluded.description",
-                    [product.id, product.name, product.category, product.price, product.unit, product.image, product.desc]
+                    "INSERT INTO products (id, name, category, price, wholesale_price, unit, image, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET name = excluded.name, category = excluded.category, price = excluded.price, wholesale_price = excluded.wholesale_price, unit = excluded.unit, image = excluded.image, description = excluded.description",
+                    [product.id, product.name, product.category, product.price, product.wholesalePrice ?? null, product.unit, product.image, product.desc]
                 );
             }
             await connection.execute(
@@ -33,11 +34,13 @@ export async function setupDatabase(pool) {
         } else {
             for (const product of defaultSiteContent.products) {
                 await connection.execute(
-                    "INSERT INTO products (id, name, category, price, unit, image, description) VALUES (?, ?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO NOTHING",
-                    [product.id, product.name, product.category, product.price, product.unit, product.image, product.desc]
+                    "INSERT INTO products (id, name, category, price, wholesale_price, unit, image, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO NOTHING",
+                    [product.id, product.name, product.category, product.price, product.wholesalePrice ?? null, product.unit, product.image, product.desc]
                 );
             }
         }
+
+        await migrateWholesalePrices(connection);
 
         const [contactMigrations] = await connection.execute(
             "SELECT migration_key FROM app_migrations WHERE migration_key = ?",
